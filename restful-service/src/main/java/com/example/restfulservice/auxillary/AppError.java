@@ -1,4 +1,4 @@
-package com.example.restfulservice.controller.auxillary;
+package com.example.restfulservice.auxillary;
 
 public class AppError extends Throwable{
     private int errorCode;

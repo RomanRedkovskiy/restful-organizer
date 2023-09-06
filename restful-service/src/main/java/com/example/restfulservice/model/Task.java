@@ -1,22 +1,25 @@
 package com.example.restfulservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
     private String description;
     private String status;
 
-    public Task(final Long id, final String description, final String status) {
-        this.id = id;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "compilation_id", referencedColumnName = "id")
+    private Compilation compilation;
+
+    public Task(String title, String description, String status, Compilation compilation) {
+        this.title = title;
         this.description = description;
         this.status = status;
+        this.compilation = compilation;
     }
 
     public Task() {
@@ -28,6 +31,22 @@ public class Task {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Compilation getCompilation() {
+        return compilation;
+    }
+
+    public void setCompilation(Compilation compilation) {
+        this.compilation = compilation;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -49,7 +68,8 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "id='" + id + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 '}';
