@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 
 @Entity
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
     private String status;
+    private boolean isDeleted = false;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "compilation_id", referencedColumnName = "id")
@@ -64,6 +66,22 @@ public class Task {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    /*    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }*/
 
     @Override
     public String toString() {

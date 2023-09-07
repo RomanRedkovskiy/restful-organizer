@@ -1,10 +1,13 @@
 package com.example.restfulservice.controller;
 
+import com.example.restfulservice.dto.UserDto;
 import com.example.restfulservice.model.Compilation;
 import com.example.restfulservice.model.Task;
 import com.example.restfulservice.model.User;
 import com.example.restfulservice.repository.CompilationRepository;
 import com.example.restfulservice.repository.UserRepository;
+import com.example.restfulservice.service.CompilationService;
+import com.example.restfulservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,42 +20,46 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private CompilationRepository compilationRepository;
+    private CompilationService compilationService;
 
     @GetMapping("")
     public Iterable<User> getCompilation() {
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable final Long id){
-        User foundedUserById = userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id " + id + " can't be found"));
-        return new ResponseEntity<>(foundedUserById, HttpStatus.OK);
+    public User getUserById(@PathVariable final Long id) {
+        return userService.findById(id);
+    }
+
+    @GetMapping("/except/{id}")
+    public Iterable<User> getUsersExceptId(@PathVariable final Long id){
+        return userService.findAllExceptId(id);
+    }
+
+    @GetMapping("/{id}/compilations")
+    public Iterable<Compilation> getAllTasksByCurrentId(@PathVariable final Long id) {
+        return compilationService.findByUserId(id);
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addCompilation(@RequestBody User user){
-        userRepository.save(user);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(user.getId());
+    @ResponseStatus(HttpStatus.CREATED)
+    public User addUser(@RequestBody UserDto userDto) {
+        return userService.create(userDto);
     }
 
-    @PostMapping("/{id}/compilations")
-    public ResponseEntity<?> addCompilation(@RequestBody Compilation compilation, @PathVariable final Long id) {
-        User foundedUserById = userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id " + id + " can't be found"));
-        compilation.setCompleteness((byte) 0);
-        compilation.getUsers().add(foundedUserById);
-        compilationRepository.save(compilation);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(compilation.getId());
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+        return userService.update(userDto, id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable final Long id){
+        userService.delete(id);
+    }
+
 }

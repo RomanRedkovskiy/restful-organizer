@@ -22,6 +22,7 @@ public class Compilation {
 
     private String name;
     private byte completeness;
+    private boolean isDeleted = false;
 
     public Compilation(Long id, String name, byte completeness) {
         this.id = id;
@@ -66,6 +67,14 @@ public class Compilation {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override

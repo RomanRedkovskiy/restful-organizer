@@ -1,9 +1,7 @@
 package com.example.restfulservice.service;
 
 import com.example.restfulservice.dto.CompilationDto;
-import com.example.restfulservice.dto.TaskDto;
 import com.example.restfulservice.model.Compilation;
-import com.example.restfulservice.model.Task;
 
 public interface CompilationService {
 
@@ -11,7 +9,7 @@ public interface CompilationService {
 
     Compilation findById(Long id);
 
-    Iterable<Task> findTasksById(Long id);
+    Iterable<Compilation> findByUserId(Long id);
 
     Compilation create(CompilationDto dto);
 

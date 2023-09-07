@@ -9,6 +9,8 @@ public interface TaskService {
 
     Task findById(Long id);
 
+    Iterable<Task> findTasksByCompilationId(Long id);
+
     Task create(TaskDto dto);
 
     Task update(TaskDto dto, Long id);

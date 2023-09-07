@@ -3,15 +3,11 @@ package com.example.restfulservice.controller;
 import com.example.restfulservice.dto.CompilationDto;
 import com.example.restfulservice.model.Compilation;
 import com.example.restfulservice.model.Task;
-import com.example.restfulservice.repository.CompilationRepository;
-import com.example.restfulservice.repository.TaskRepository;
 import com.example.restfulservice.service.CompilationService;
+import com.example.restfulservice.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/compilations")
@@ -19,6 +15,9 @@ public class CompilationController {
 
     @Autowired
     private CompilationService compilationService;
+
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping("")
     public Iterable<Compilation> getCompilation() {
@@ -32,7 +31,7 @@ public class CompilationController {
 
     @GetMapping("/{id}/tasks")
     public Iterable<Task> getAllTasksByCurrentId(@PathVariable final Long id) {
-        return compilationService.findTasksById(id);
+        return taskService.findTasksByCompilationId(id);
     }
 
     @PostMapping("")

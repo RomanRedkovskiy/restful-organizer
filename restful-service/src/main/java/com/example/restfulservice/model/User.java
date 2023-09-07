@@ -15,10 +15,11 @@ public class User {
     private String name;
     private String login;
     private String password;
+    private boolean isDeleted = false;
 
     @ManyToMany
     @JoinTable(
-            name = "compilation_added",
+            name = "user_compilation",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "compilation_id")
     )
@@ -65,5 +66,13 @@ public class User {
 
     public void setCompilations(Set<Compilation> compilations) {
         this.compilations = compilations;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }
