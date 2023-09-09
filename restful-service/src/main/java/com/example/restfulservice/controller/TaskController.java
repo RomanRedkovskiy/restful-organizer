@@ -15,26 +15,26 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("")
-    public Iterable<Task> getTasks() {
+    public Iterable<TaskDto> getTasks() {
         return taskService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task getTask(@PathVariable final Long id) {
-        return taskService.findById(id);
+    public TaskDto getTask(@PathVariable final Long id) {
+        return taskService.findDtoById(id);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTask(@RequestBody TaskDto taskDto) {
+    public TaskDto addTask(@RequestBody TaskDto taskDto) {
         return taskService.create(taskDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Task updateTask(@RequestBody final TaskDto taskDto, @PathVariable final Long id) {
-        return taskService.update(taskDto, id);
+    public TaskDto updateTask(@RequestBody final TaskDto taskDto) {
+        return taskService.update(taskDto);
     }
 
     @DeleteMapping("/{id}")

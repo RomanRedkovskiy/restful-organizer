@@ -1,6 +1,7 @@
 package com.example.restfulservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -12,13 +13,13 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "compilation")
     private Set<Task> tasks = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "compilations")
-    private Set<User> users = new HashSet<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "compilation")
+    private Set<UserCompilation> users = new HashSet<>();
 
     private String name;
     private byte completeness;
@@ -61,20 +62,25 @@ public class Compilation {
         this.completeness = completeness;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+
+    public Set<UserCompilation> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserCompilation> users) {
+        this.users = users;
     }
 
     @Override

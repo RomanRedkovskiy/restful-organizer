@@ -5,15 +5,21 @@ import com.example.restfulservice.model.User;
 
 public interface UserService {
 
-    Iterable<User> findAll();
+    Iterable<User> findAllUsers();
 
-    Iterable<User> findAllExceptId(Long id);
+    Iterable<UserDto> findAllDtos();
 
-    User findById(Long id);
+    Iterable<User> findAllUsersExceptId(Long id);
 
-    User create(UserDto dto);
+    Iterable<UserDto> findAllDtosExceptId(Long id);
 
-    User update(UserDto dto, Long id);
+    User findUserById(Long id);
+
+    UserDto findDtoById(Long id);
+
+    UserDto create(UserDto dto);
+
+    UserDto update(UserDto dto);
 
     void delete(Long id);
 

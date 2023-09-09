@@ -5,16 +5,24 @@ import com.example.restfulservice.model.Compilation;
 
 public interface CompilationService {
 
-    Iterable<Compilation> findAll();
+    Iterable<Compilation> findAllCompilations();
 
-    Compilation findById(Long id);
+    Iterable<CompilationDto> findAllDtos();
 
-    Iterable<Compilation> findByUserId(Long id);
+    Compilation findCompilationById(Long id);
 
-    Compilation create(CompilationDto dto);
+    CompilationDto findDtoById(Long id);
 
-    Compilation update(CompilationDto dto, Long id);
+    Iterable<CompilationDto> findByUserIdAndNotShared(Long id);
+
+    Iterable<CompilationDto> findByUserIdAndSharedAndChangeable(Long id);
+
+    Iterable<CompilationDto> findByUserIdAndSharedAndNotChangeable(Long id);
+
+    CompilationDto create(CompilationDto dto);
 
     void delete(Long id);
+
+    void save(Compilation compilation);
 
 }

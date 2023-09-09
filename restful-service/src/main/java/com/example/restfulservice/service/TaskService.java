@@ -1,19 +1,23 @@
 package com.example.restfulservice.service;
 
-import com.example.restfulservice.model.Task;
 import com.example.restfulservice.dto.TaskDto;
+import com.example.restfulservice.model.Task;
 
 public interface TaskService {
 
-    Iterable<Task> findAll();
+    Iterable<TaskDto> findAll();
 
-    Task findById(Long id);
+    Task findTaskById(Long id);
+
+    TaskDto findDtoById(Long id);
 
     Iterable<Task> findTasksByCompilationId(Long id);
 
-    Task create(TaskDto dto);
+    Iterable<TaskDto> findTaskDtosByCompilationId(Long id);
 
-    Task update(TaskDto dto, Long id);
+    TaskDto create(TaskDto dto);
+
+    TaskDto update(TaskDto dto);
 
     void delete(Long id);
 }

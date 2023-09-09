@@ -1,5 +1,6 @@
 package com.example.restfulservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Task {
     private String status;
     private boolean isDeleted = false;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "compilation_id", referencedColumnName = "id")
     private Compilation compilation;

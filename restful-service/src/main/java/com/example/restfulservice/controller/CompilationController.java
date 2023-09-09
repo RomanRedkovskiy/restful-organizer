@@ -1,8 +1,7 @@
 package com.example.restfulservice.controller;
 
 import com.example.restfulservice.dto.CompilationDto;
-import com.example.restfulservice.model.Compilation;
-import com.example.restfulservice.model.Task;
+import com.example.restfulservice.dto.TaskDto;
 import com.example.restfulservice.service.CompilationService;
 import com.example.restfulservice.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,33 +19,33 @@ public class CompilationController {
     private TaskService taskService;
 
     @GetMapping("")
-    public Iterable<Compilation> getCompilation() {
-        return compilationService.findAll();
+    public Iterable<CompilationDto> getCompilation() {
+        return compilationService.findAllDtos();
     }
 
     @GetMapping("/{id}")
-    public Compilation getCompilationById(@PathVariable final Long id) {
-        return compilationService.findById(id);
+    public CompilationDto getCompilationById(@PathVariable final Long id) {
+        return compilationService.findDtoById(id);
     }
 
     @GetMapping("/{id}/tasks")
-    public Iterable<Task> getAllTasksByCurrentId(@PathVariable final Long id) {
-        return taskService.findTasksByCompilationId(id);
+    public Iterable<TaskDto> getAllTasksByCurrentId(@PathVariable final Long id) {
+        return taskService.findTaskDtosByCompilationId(id);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Compilation addCompilation(@RequestBody CompilationDto compilationDto) {
+    public CompilationDto addCompilation(@RequestBody CompilationDto compilationDto) {
         return compilationService.create(compilationDto);
     }
 
-
-    @PutMapping("/{id}")
+/*
+    @PutMapping("/share")
     @ResponseStatus(HttpStatus.OK)
-    public Compilation changeCompilationName(@RequestBody CompilationDto compilationDto,
-                                             @PathVariable final Long id) {
-        return compilationService.update(compilationDto, id);
+    public void shareCompilation(@RequestBody UserCompilation userCompilation) {
+        compilationService.share(userCompilation);
     }
+*/
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

@@ -1,6 +1,7 @@
 package com.example.restfulservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -10,20 +11,16 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    private Long id;
     private String name;
     private String login;
     private String password;
     private boolean isDeleted = false;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_compilation",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "compilation_id")
-    )
-    private Set<Compilation> compilations = new HashSet<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
+    private Set<UserCompilation> compilations = new HashSet<>();
 
     public User() {
     }
@@ -60,11 +57,11 @@ public class User {
         this.password = password;
     }
 
-    public Set<Compilation> getCompilations() {
+    public Set<UserCompilation> getCompilations() {
         return compilations;
     }
 
-    public void setCompilations(Set<Compilation> compilations) {
+    public void setCompilations(Set<UserCompilation> compilations) {
         this.compilations = compilations;
     }
 
