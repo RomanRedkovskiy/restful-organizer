@@ -114,3 +114,10 @@
 	cursor: pointer;
 	width: 120px;
   }
+
+  .not-found{
+	color: #f1356d;
+	padding-top: 50px;
+	text-align: center;
+  }
+

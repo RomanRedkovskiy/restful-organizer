@@ -1,5 +1,6 @@
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import TaskForm from "./TaskForm";
+import Navbar from "./Navbar";
 
 const NewTask = () => {
 	const history = useHistory();
@@ -19,12 +20,18 @@ const NewTask = () => {
 	}
 
 	return ( 
-		<TaskForm 
-			title = '' 
-			description = '' 
-			status = 'Uncompleted' 
-			action = 'Add' 
-			handleSubmit={handleSubmit}/>
+		<div>
+			<Navbar />
+			<div className="content">
+				<TaskForm 
+					title = '' 
+					description = '' 
+					status = 'Uncompleted' 
+					action = 'Add' 
+					handleSubmit={handleSubmit}
+				/>
+			</div>
+		</div>
 	 );
 }
  

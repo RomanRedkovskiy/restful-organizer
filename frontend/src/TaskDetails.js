@@ -1,5 +1,6 @@
 import { Link, useHistory, useParams } from "react-router-dom/cjs/react-router-dom";
 import useFetch from "./useFetch";
+import Navbar from "./Navbar";
 
 const TaskDetails = () => {
 	const { id } = useParams();
@@ -19,28 +20,31 @@ const TaskDetails = () => {
 		})
 	};
 	return ( 
-		<div className="task-details">
-			{isLoading && <div>Loading...</div>}
-			{error && <div>{error}</div>}
-			{task && (
-				<div>
-					<article>
-						<h1> {task.title} </h1>
-						<h2> Description: </h2>
-						<p> {task.description} </p>
-						<h2> Status: </h2>
-						<p> {task.status} </p>
-					</article>
-					<button onClick = {handleDelete}>Delete Task</button>
-					<Link
-						to={{
-							pathname: `/edit-task/${task.id}`,
-							state: task // your data array of objects
-						}}>
-						<button>Edit Task</button>
-					</Link>
-				</div>
-			)}
+		<div>
+			<Navbar />
+			<div className="task-details content">
+				{isLoading && <div>Loading...</div>}
+				{error && <div>{error}</div>}
+				{task && (
+					<div>
+						<article>
+							<h1> {task.title} </h1>
+							<h2> Description: </h2>
+							<p> {task.description} </p>
+							<h2> Status: </h2>
+							<p> {task.status} </p>
+						</article>
+						<button onClick = {handleDelete}>Delete Task</button>
+						<Link
+							to={{
+								pathname: `/edit-task/${task.id}`,
+								state: task // your data array of objects
+							}}>
+							<button>Edit Task</button>
+						</Link>
+					</div>
+				)}
+			</div>
 		</div>
 	 );
 }

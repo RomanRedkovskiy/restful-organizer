@@ -1,41 +1,38 @@
 import Navbar from './Navbar';
 import Home from './Home';
 import NewTask from './NewTask';
-import RegistrationForm from './RegistrationForm'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import TaskDetails from './TaskDetails';
 import EditTask from './EditTask';
 import NotFound from './NotFound';
-import{useState} from 'react';
+import StartPage from './StartPage';
+import {useState} from 'react';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Switch>
-			<Route exact path="/">
-				<RegistrationForm />
-			</Route>
-			<Navbar />
-			<div className="content">
+			<Switch>
+				<Route exact path="/">
+					<StartPage />
+				</Route>
 				<Route exact path="/new_task">
-            		<NewTask />
-        		</Route>
+					<NewTask />
+				</Route>
 				<Route exact path="/tasks/:id">
-            		<TaskDetails />
-           		</Route>
+					<TaskDetails />
+				</Route>
 				<Route exact path="/edit-task/:id">
-            		<EditTask />
-           		</Route>
-            	<Route exact path="/home_page">
-            		<Home />
-           		</Route>
+					<EditTask />
+				</Route>
+				<Route exact path="/home_page">
+					<Home />
+				</Route>
 				<Route path="*">
-            		<NotFound />
-           		</Route>
-			</div>
-        </Switch>
-    </div>
+					<NotFound />
+				</Route>
+			</Switch>
+    	</div>
     </Router>
   );
 }
