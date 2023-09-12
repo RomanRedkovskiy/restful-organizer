@@ -15,6 +15,8 @@ public interface UserService {
 
     User findUserById(Long id);
 
+    UserDto checkUserDataCorrectness(UserDto dto);
+
     UserDto findDtoById(Long id);
 
     UserDto create(UserDto dto);

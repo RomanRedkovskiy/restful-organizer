@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom/cjs/react-router-dom";
-import Navbar from "./Navbar";
+import AuthorizedNavbar from "./Authorized/AuthorizedNavbar";
 
 const NotFound = () => {
 	return ( 
 		<div>
-			<Navbar />
+			<AuthorizedNavbar />
 			<div className="not-found container links">
 				<h2>Sorry</h2>
 				<p>This page cannot be found</p>

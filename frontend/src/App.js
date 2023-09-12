@@ -1,15 +1,19 @@
-import Navbar from './Navbar';
-import Home from './Home';
-import NewTask from './NewTask';
+import Home from './TaskProcessing/TaskProcessor';
+import NewTask from './TaskProcessing/NewTask';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import TaskDetails from './TaskDetails';
-import EditTask from './EditTask';
+import TaskDetails from './TaskProcessing/TaskDetails';
+import EditTask from './TaskProcessing/EditTask';
 import NotFound from './NotFound';
-import StartPage from './StartPage';
+import StartPage from './Unauthorized/StartPage';
 import {useState} from 'react';
+import Registration from './Unauthorized/Registration';
+import Login from './Unauthorized/Login';
+import {IdProvider} from './IdProvider';
+import CompilationProcessor from './CompilationProcessing/CompilationProcessor';
 
 function App() {
   return (
+	<IdProvider>
     <Router>
       <div className="App">
 			<Switch>
@@ -28,12 +32,22 @@ function App() {
 				<Route exact path="/home_page">
 					<Home />
 				</Route>
+				<Route exact path="/registration">
+					<Registration />
+				</Route>
+				<Route exact path="/login">
+					<Login />
+				</Route>
+				<Route exact path="/compilations">
+					<CompilationProcessor />
+				</Route>
 				<Route path="*">
 					<NotFound />
 				</Route>
 			</Switch>
     	</div>
     </Router>
+	</IdProvider>
   );
 }
 

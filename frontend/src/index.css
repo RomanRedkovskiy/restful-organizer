@@ -3,11 +3,11 @@
 /* base styles */
 * {
 	margin: 0;
+	background-color: #f7ebef;
 	font-family: "Quicksand";
 	color: #333;
 }
 .navbar {
-	padding: 20px;
 	display: flex;
 	align-items: center;
 	max-width: 1200px;
@@ -106,6 +106,7 @@
 	display: block;
   }
   .create button {
+	margin-top: 15px;
 	background: #f1356d;
 	color: #fff;
 	border: 0;
@@ -121,3 +122,95 @@
 	text-align: center;
   }
 
+  .compilation-preview{
+	display: flex;
+	flex-wrap: wrap;
+  }
+
+  .compilation{
+	flex: 0 0 30%;
+	margin: 20px;
+  }
+
+  .compilation-layout{
+	margin-top: 50px;
+  }
+
+  .compilation-container{
+	position: relative;
+	background-color: #e0dfdf;
+	padding: 10px 16px;
+	margin: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.267);
+	border-radius: 10px;
+	overflow-wrap: break-word;
+	
+  }
+
+  .compilation-container:hover {
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 34px 35px, rgba(0, 0, 0, 0.12) 0px -7px 10px, 
+	rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 7px 8px, #f1356d 0px -3px 5px;
+  }
+  .compilation-container h2 {
+	background-color: #e0dfdf;
+	font-size: 25px;
+	color: black;
+	margin-bottom: 8px;
+  }
+  .compilation-container h3 {
+	background-color: #e0dfdf;
+	font-size: 15px;
+	color: black;
+	margin-bottom: 8px;
+  }
+
+  .compilation-container a{
+	text-decoration: none;
+  }
+
+  .small-button {
+	position: absolute;
+	min-width: 75px;
+	right: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.267);
+	display: flex;
+	justify-content: space-between;
+	padding: 0;
+	outline: none;
+	border-radius: 5px;
+	overflow: hidden;
+	font-size: 13px;
+	font-weight: 800;
+	cursor: pointer;
+}
+
+.share-button{
+	top: 32px;
+}
+
+.edit-button{
+	top: 7px;
+}
+
+.delete-button{
+	top: 57px;
+}
+
+.small-button:hover {
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 34px 35px, rgba(0, 0, 0, 0.12) 0px -7px 10px, 
+	rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 7px 8px, #f1356d 0px -1px 2px;
+}
+
+.small-button-text,
+.small-button-icon {
+	display: inline-flex;
+	align-items: center;
+	padding: 0 5px;
+	color: black;
+	height: 100%;
+}
+
+.small-button-icon {
+	padding-top: 3px;
+	font-size: 1em;
+}

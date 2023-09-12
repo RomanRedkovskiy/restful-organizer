@@ -1,8 +1,6 @@
 package com.example.restfulservice.service;
 
-import com.example.restfulservice.dto.CompilationDto;
 import com.example.restfulservice.dto.UserDto;
-import com.example.restfulservice.model.Compilation;
 import com.example.restfulservice.model.User;
 import com.example.restfulservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -46,6 +45,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto checkUserDataCorrectness(UserDto dto) {
+         Optional<User> user = userRepository.findUserByNameAndLoginAndPasswordAndIsDeleted(dto.getName(),
+                dto.getLogin(), dto.getPassword(), false);
+         if(user.isEmpty()) {
+             return entityValidaitionFailure(dto);
+         }
+         return userToDto(user.get());
+    }
+
+    @Override
     public UserDto findDtoById(Long id) {
         return userToDto(findUserById(id));
     }
@@ -53,6 +62,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto dto) {
         User user = new User();
+        if (isUsernameTaken(dto)) {
+            return entityValidaitionFailure(dto);
+        }
         return saveDtoToUser(dto, user);
     }
 
@@ -67,6 +79,15 @@ public class UserServiceImpl implements UserService {
         User user = findUserById(id);
         user.setDeleted(true);
         userRepository.save(user);
+    }
+
+    boolean isUsernameTaken(UserDto dto) {
+        return userRepository.findUserByNameAndIsDeleted(dto.getName(), false).isPresent();
+    }
+
+    UserDto entityValidaitionFailure(UserDto dto) {
+        dto.setId((long) -1);
+        return dto;
     }
 
     Iterable<UserDto> userListToDtoList(Iterable<User> taskList) {

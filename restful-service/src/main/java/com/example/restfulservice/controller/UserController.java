@@ -54,6 +54,11 @@ public class UserController {
         return userService.create(userDto);
     }
 
+    @PostMapping("/login")
+    public UserDto checkLoginCorrectness(@RequestBody UserDto userDto){
+        return userService.checkUserDataCorrectness(userDto);
+    }
+
     @PutMapping("")
     public UserDto updateUser(@RequestBody UserDto userDto) {
         return userService.update(userDto);
