@@ -122,7 +122,7 @@
 	text-align: center;
   }
 
-  .compilation-preview{
+  .list-preview{
 	display: flex;
 	flex-wrap: wrap;
   }
@@ -136,41 +136,54 @@
 	margin-top: 50px;
   }
 
-  .compilation-container{
+  .task-width{
+	width: 600px;
+  }
+
+  .compilation-container, .task-container{
 	position: relative;
 	background-color: #e0dfdf;
 	padding: 10px 16px;
-	margin: 20px;
 	border: 1px solid rgba(0, 0, 0, 0.267);
 	border-radius: 10px;
 	overflow-wrap: break-word;
-	
   }
 
-  .compilation-container:hover {
+  .compilation-container{
+	margin: 20px;
+  }
+
+  .task-container{
+	margin: 20px auto;
+	width: 600px;
+  }
+
+  .compilation-container:hover,  .task-container:hover {
 	box-shadow: rgba(0, 0, 0, 0.25) 0px 34px 35px, rgba(0, 0, 0, 0.12) 0px -7px 10px, 
 	rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 7px 8px, #f1356d 0px -3px 5px;
   }
-  .compilation-container h2 {
+  .compilation-container h2, .compilation-container h3, .compilation-container p,
+  .task-container h2, .task-container h3, .task-container p{
 	background-color: #e0dfdf;
-	font-size: 25px;
 	color: black;
 	margin-bottom: 8px;
-  }
-  .compilation-container h3 {
-	background-color: #e0dfdf;
-	font-size: 15px;
-	color: black;
-	margin-bottom: 8px;
+	text-align: start;
   }
 
-  .compilation-container a{
+  .compilation-container h2, .task-container h2 {
+	font-size: 25px;
+  }
+  .compilation-container h3, .task-container h3 {
+	font-size: 15px;
+  }
+
+  .compilation-container a, .task-container a{
 	text-decoration: none;
   }
 
   .small-button {
 	position: absolute;
-	min-width: 75px;
+	min-width: 76px;
 	right: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.267);
 	display: flex;
@@ -213,4 +226,34 @@
 .small-button-icon {
 	padding-top: 3px;
 	font-size: 1em;
+}
+
+.checkbox-container {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.checkbox-button {
+	flex: 0 0 5%;
+}
+
+.checkbox-text {
+	flex: 0 0 95%;
+	margin-left: 5px;
+}
+
+.flexible-container{
+	width: 600px;
+	margin: 20px auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.flexible-container h3{
+	font-size: 15px;
+}
+
+.compilation-name{
+	color: #f1356d;
 }

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom/cjs/react-router-dom";
-import AuthorizedNavbar from "./Authorized/AuthorizedNavbar";
+import AuthorizedNavbar from "./Authorized/NavbarAuthorized";
 
 const NotFound = () => {
 	return ( 
