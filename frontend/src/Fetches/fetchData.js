@@ -1,4 +1,4 @@
-export default async function fetchData(url, method, body) {
+export default function fetchData(url, method, body) {
 	fetch(url, {
 		method: method,
 		headers: {
@@ -9,7 +9,10 @@ export default async function fetchData(url, method, body) {
 			"Cache-Control": "no-cache"
 		},
 		body: JSON.stringify(body)
-	  }).then(response => response.json())
-	  .then(data => data)
-	  .catch(error => console.error(error));
+	}).then(res => {
+		if(!res.ok){
+			throw Error('Could not fetch data for a server');
+		}
+		return res.json();
+	});
 }

@@ -10,6 +10,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(length = 2000)
     private String description;
     private String status;
     private boolean isDeleted = false;

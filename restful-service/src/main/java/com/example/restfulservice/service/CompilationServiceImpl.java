@@ -7,7 +7,6 @@ import com.example.restfulservice.model.User;
 import com.example.restfulservice.model.UserCompilation;
 import com.example.restfulservice.repository.CompilationRepository;
 import com.example.restfulservice.repository.UserCompilationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,14 +17,17 @@ import java.util.stream.StreamSupport;
 @Service
 public class CompilationServiceImpl implements CompilationService {
 
-    @Autowired
-    private CompilationRepository compilationRepository;
+    private final CompilationRepository compilationRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private UserCompilationRepository userCompilationRepository;
+    private final UserCompilationRepository userCompilationRepository;
+
+    public CompilationServiceImpl(CompilationRepository compilationRepository, UserService userService, UserCompilationRepository userCompilationRepository) {
+        this.compilationRepository = compilationRepository;
+        this.userService = userService;
+        this.userCompilationRepository = userCompilationRepository;
+    }
 
     @Override
     public Iterable<Compilation> findAllCompilations() {

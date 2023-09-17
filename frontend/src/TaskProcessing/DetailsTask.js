@@ -1,6 +1,6 @@
 import { Link, useHistory } from "react-router-dom/cjs/react-router-dom";
 import useFetch from "../Fetches/useFetch";
-import AuthorizedNavbar from "../Authorized/NavbarAuthorized";
+import AuthorizedNavbar from "../Navbars/NavbarAuthorized";
 import { useId } from '../IdProvider';
 import fetchNoData from "../Fetches/fetchNoData";
 

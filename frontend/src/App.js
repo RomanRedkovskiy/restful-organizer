@@ -15,6 +15,7 @@ import CompilationShare from './CompilationProcessing/ShareCompilation';
 import CompilationList from './CompilationProcessing/ListCompilation';
 import CompilationDelete from './CompilationProcessing/DeleteCompilation';
 import CompilationEdit from './CompilationProcessing/EditCompilation';
+import AddCompilation from './CompilationProcessing/AddCompilation';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
 				<Route exact path="/">
 					<StartPage />
 				</Route>
-				<Route exact path="/new_task">
+				<Route exact path="/new-task">
 					<NewTask />
 				</Route>
 				<Route exact path="/task">
@@ -51,6 +52,9 @@ function App() {
 				</Route>
 				<Route exact path="/compilation-details">
 					<CompilationDetails />
+				</Route>
+				<Route exact path="/new-compilation">
+					<AddCompilation />
 				</Route>
 				<Route exact path="/share-compilation">
 					<CompilationShare />

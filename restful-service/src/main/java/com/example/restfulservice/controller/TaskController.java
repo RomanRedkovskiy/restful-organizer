@@ -1,9 +1,7 @@
 package com.example.restfulservice.controller;
 
-import com.example.restfulservice.model.Task;
 import com.example.restfulservice.service.TaskService;
 import com.example.restfulservice.dto.TaskDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("")
     public Iterable<TaskDto> getTasks() {

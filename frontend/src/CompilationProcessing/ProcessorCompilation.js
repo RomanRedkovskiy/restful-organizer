@@ -1,5 +1,5 @@
 import { useId, useIdUpdate } from '../IdProvider';
-import AuthorizedNavbar from '../Authorized/NavbarAuthorized';
+import AuthorizedNavbar from '../Navbars/NavbarAuthorized';
 import useFetch from '../Fetches/useFetch';
 import CompilationList from './ListCompilation';
 const CompilationProcessor = () => {
@@ -14,7 +14,7 @@ const CompilationProcessor = () => {
 	return ( 
 		<>
 			<AuthorizedNavbar />
-			<div className="home container compilation-layout">
+			<div className="home container default-layout">
 				{selfError && <h2>{selfError}</h2>}
 				{isSelfLoading && <h2>Loading...</h2>}
 				{selfCompilations &&  selfCompilations.length > 0 && 
@@ -23,7 +23,7 @@ const CompilationProcessor = () => {
 				{sharedError && <h2>{sharedError}</h2>}
 				{isSharedLoading && <h2>Loading...</h2>}
 				{sharedCompilations &&  sharedCompilations.length > 0 && 
-				<CompilationList compilations = {sharedCompilations} title = "Shared Compilations:" isSelf={true} isShared={true}/>}
+				<CompilationList compilations = {sharedCompilations} title = "Shared Compilations:" isSelf = {true} isShared={true}/>}
 
 				{readonlyError && <h2>{readonlyError}</h2>}
 				{isReadonlyLoading && <h2>Loading...</h2>}

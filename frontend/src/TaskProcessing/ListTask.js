@@ -37,18 +37,25 @@ function TaskList({ tasks, title, id, completeness }) {
 	}
 	
 	function handleTaskChoice(id){
-		setId(currentId.userId, currentId.compilationId, id);
+		setId(currentId.userId, currentId.compilationId, id, currentId.isShared);
 	}
 
 	return (
 		<div className="flexible-container">
 			<h2 className="compilation-name">{title}</h2>
-			<h3 className="compilation-name">{completeness}</h3>
+			{tasks.length > 0 && (
+				<h3 className="compilation-name">{completeness}</h3>
+			)}
+			<Link to = "/new-task">
+				<button className="add-task-btn">Add task</button>
+			</Link>
+			{tasks.length > 0 && (
+			<>
 			{tasks.map((task) => (
 				<div className = "entity-container task-container" key={task.id}>
 					<Link onClick = {() => handleTaskChoice(task.id)} to = "/task">
 						<h2>{task.title}</h2>
-						<p> {truncateTextWithEllipsis(task.description, 137)}</p>
+						<p> {truncateTextWithEllipsis(task.description, 50)}</p>
 					</Link>
 					{!isReadOnly && <>
 						<Link onClick = {() => handleTaskChoice(task.id)} to = "/edit-task">
@@ -69,7 +76,7 @@ function TaskList({ tasks, title, id, completeness }) {
 						</Link>
 					</>}
 				</div>
-			))}
+			))}</>)}
 		</div>
 	);
 }

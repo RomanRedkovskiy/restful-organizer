@@ -1,4 +1,4 @@
-import UnauthorizedNavBar from "./NavbarUnauthorized";
+import UnauthorizedNavBar from "../Navbars/NavbarUnauthorized";
 import AboutProject from "./AboutProject";
 import { useId, useIdUpdate } from '../IdProvider';
 import { useEffect } from "react";

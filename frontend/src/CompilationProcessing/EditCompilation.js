@@ -3,26 +3,34 @@ import { useId } from '../IdProvider';
 import useFetch from '../Fetches/useFetch';
 import fetchData from '../Fetches/fetchData';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
-import AuthorizedNavbar from '../Authorized/NavbarAuthorized';
+import AuthorizedNavbar from '../Navbars/NavbarAuthorized';
 
 const CompilationEdit = () => {
 
 	const history = useHistory();
 	const [currentName, setCurrentName] = useState(null);
 	const currentId = useId();
+	console.log(currentId);
 
-	function handleEdit(currentName){
+	const [response, setResponse] = useState("");
+
+	function handleEdit(currentName) {
 		const userCompilation = {
 		  name: currentName,
 		  compilation_id: currentId.compilationId,
 		  user_id: currentId.userId,
-		  is_shared: currentId.isEditable,
+		  is_shared: currentId.isShared,
 		  read_only: false
 		};
-		// Use then method to wait for fetch to finish
-		fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation)
-  			.then (() => setTimeout(history.push('/compilations'), 2000));
-	  }
+		setResponse(fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation));
+	}
+	useEffect(() => {
+		if(response !== ""){
+			history.push('/compilations');
+		}
+	}, [response]);
+
+
 
 	const {data: compilation, isLoading, error} =
     useFetch('http://localhost:8080/compilations/' + currentId.compilationId);
@@ -38,16 +46,16 @@ const CompilationEdit = () => {
 		
 		<AuthorizedNavbar />
 		{currentName !== null && ( 
-    	<div className="create">
+    	<div className="create default-layout">
       		<h2>Edit Compilation:</h2>
       		<form onSubmit={(() => handleEdit(currentName))}>
-        		<label>Compilation name</label>
+        		<label>Compilation name:</label>
         		<input 
 					required
 					value = {currentName}
 					onChange={(e) => setCurrentName(e.target.value)}>
 				</input>
-				<button type="submit">Edit Name</button>
+				<button type="submit">Edit</button>
       		</form>
     	</div>
 		)};

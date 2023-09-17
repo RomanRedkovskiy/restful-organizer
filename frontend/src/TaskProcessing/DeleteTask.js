@@ -1,8 +1,6 @@
 import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 import { useId } from '../IdProvider';
-import fetchData from '../Fetches/fetchData';
 import { useEffect } from 'react';
-import fetchNoData from '../Fetches/fetchNoData';
 
 
 

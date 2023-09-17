@@ -2,42 +2,64 @@ import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router
 import { useId, useIdUpdate } from '../IdProvider';
 import UserForm from '../UserProcessing/FormUser';
 import fetchData from '../Fetches/fetchData';
-import UnauthorizedNavBar from "./NavbarUnauthorized";
-import { useState } from 'react';
+import UnauthorizedNavBar from "../Navbars/NavbarUnauthorized";
+import { useEffect, useState } from 'react';
 
 const Login = () => {
 
-	const history = useHistory();
-	const currentId = useId();
-	const setId = useIdUpdate();
-	const [errorMessage, setErrorMessage] = useState('');
+  const history = useHistory();
+  const currentId = useId();
+  const setId = useIdUpdate();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [data, setData] = useState();
 
-	const handleLogin = (login, password, name) => (e) => {
-		let user = {login, password, name};
-		e.preventDefault();
-		fetchData("http://localhost:8080/users/login", "POST", user).then(data => {
-			if(data.id === -1){
-				console.log('error!');
-				setErrorMessage('Incorrect data, try again!');
-			} else {
-				setId(data.id, currentId.compilationId, currentId.taskId);
-				setErrorMessage('');
-				history.push('/compilations');
-			}
-		})
-		//const {data: tasks, isLoading, error} = useFetch('http://localhost:8080/tasks', 'POST', user);
-	}
+  useEffect(() => {
+    if(data){
+      if(data.id === -1){
+        console.log('error!');
+        setErrorMessage('Incorrect data, try again!');
+      } else {
+        setId(data.id, currentId.compilationId, currentId.taskId, currentId.isShared);
+        setErrorMessage('');
+        history.push('/compilations');
+      }
+    }
+  }, [data]);
 
-	return(
-		<div>
-			<UnauthorizedNavBar />
-			<UserForm
-				formText = "Login"
-				handler = {handleLogin}
-			/>
-			<div className="content create not-found"> {errorMessage} </div>
-		</div>
-	);
+  const handleLogin = (login, password, name) => (e) => {
+    let user = {login, password, name};
+    e.preventDefault();
+	fetch("http://localhost:8080/users/login", {
+		method: "POST",
+		headers: {
+			"Access-Control-Allow-Headers" : "Content-Type",
+			"Access-Control-Allow-Origin": "*",
+			'Content-Type': 'application/json',
+			"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
+			"Cache-Control": "no-cache"
+		},
+		body: JSON.stringify(user)
+	}).then(res => {
+		if(!res.ok){
+			throw Error('Could not fetch data for a server');
+		}
+		return res.json();
+	}).then(fetchedData => {
+		setData(fetchedData);
+		console.log(fetchedData);
+	});
+  }
+
+  return(
+    <div>
+      <UnauthorizedNavBar />
+      <UserForm
+        formText = "Login"
+        handler = {handleLogin}
+      />
+      <div className="content create not-found"> {errorMessage} </div>
+    </div>
+  );
   };
 
   export default Login;

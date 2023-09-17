@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 const IdContext = React.createContext();
 const IdUpdateContext = React.createContext();
@@ -12,11 +12,17 @@ export function useIdUpdate() {
 }
 
 export function IdProvider ({children}){
-	const [id, setId] = useState({ userId: 24, compilationId: -1, taskId: -1});
+	const [id, setId] = useState(() => {
+		const storedId = localStorage.getItem('id');
+		return storedId !== null ? JSON.parse(storedId) : { userId: -1, compilationId: -1, taskId: -1, isShared: false };
+	});
 
-	function changeId(newUser, newCompilation, newTask) {
-		// Use the setId function to update the id state with the new values
-		setId({userId: newUser, compilationId: newCompilation, taskId: newTask});
+	useEffect(() => {
+		localStorage.setItem('id', JSON.stringify(id));
+	}, [id]);
+
+	function changeId(newUser, newCompilation, newTask, newIsShared) {
+		setId({userId: newUser, compilationId: newCompilation, taskId: newTask, isShared: newIsShared});
 	}
 	return (
 		<IdContext.Provider value = {id}>

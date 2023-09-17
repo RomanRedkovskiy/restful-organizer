@@ -1,31 +1,39 @@
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import { useState, useEffect } from "react";
 import TaskForm from "./FormTask";
-import { useId } from '../IdProvider';
-import AuthorizedNavbar from "../Authorized/NavbarAuthorized";
+import { useId, useIdUpdate } from '../IdProvider';
+import AuthorizedNavbar from "../Navbars/NavbarAuthorized";
 import useFetch from "../Fetches/useFetch";
 import fetchData from "../Fetches/fetchData";
 
 const EditTask = () => {
 	const history = useHistory();
 	const currentId = useId();
+	const setId = useIdUpdate();
+	const [response, setResponse] = useState("");
 
 	const {data: task, isLoading, error} =
 		useFetch('http://localhost:8080/tasks/' + currentId.taskId);
 
-	const handleEdit = (id, title, description, status, compilationId) => (e) => {
+	const handleEdit = (id, title, description, status, compilation_id) => (e) => {
+		setId(currentId.userId, compilation_id, currentId.taskId, currentId.isShared);
 		e.preventDefault();
 		const editTask = {
 			id: id,
 			title: title,
 			description: description,
 			status: status,
-			compilation_id: compilationId
+			compilation_id: compilation_id
 		};
-		console.log(editTask);
-		// Use then method to wait for fetch to finish
-		fetchData('http://localhost:8080/tasks', 'PUT', editTask)
-		.then (() => setTimeout(history.push('/compilations'), 2000));
+		setResponse(fetchData('http://localhost:8080/tasks', 'PUT', editTask));
 	}
+
+	useEffect(() => {
+		if(response !== ""){
+			setTimeout(history.push('/compilation'), 200);
+		}
+	}, [response]);
+
 	return ( 
 		<div>
 			<AuthorizedNavbar />

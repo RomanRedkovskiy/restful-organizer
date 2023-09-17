@@ -3,9 +3,10 @@ import { useId } from '../IdProvider';
 import { useEffect, useState } from 'react';
 import useFetch from '../Fetches/useFetch';
 import fetchData from '../Fetches/fetchData';
-import AuthorizedNavbar from '../Authorized/NavbarAuthorized';
+import AuthorizedNavbar from '../Navbars/NavbarAuthorized';
 
 const CompilationShare = () => {
+	const [response, setResponse] = useState("");
 
 	function handleShare(){
 		const userCompilation = {
@@ -16,9 +17,14 @@ const CompilationShare = () => {
 		  read_only: isReadOnly
 		};
 		// Use then method to wait for fetch to finish
-		fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation);
-		setTimeout (history.push('/compilations'), 2000);	
+		setResponse(fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation));
 	}
+
+	useEffect(() => {
+		if(response !== ""){
+			history.push('/compilations');
+		}
+	}, [response]);
 
 	function handleChange () {
 		// Update the state with the opposite value of the current state
@@ -38,7 +44,6 @@ const CompilationShare = () => {
 	useEffect(() => {
 		if(users !== null){
 			setSelectedId(users[0].id);
-			console.log("It's Finally here!");
 		}
 	}, [users]);
 
@@ -48,7 +53,7 @@ const CompilationShare = () => {
 		{(isLoading || isCompilationLoading) && <div>Loading...</div>}
 		{(error || compilationError) && <div>{error} {compilationError}</div>}
 		{users && currentCompilation && (
-		<div className="create">
+		<div className="create default-layout">
 			<h2>Share "{currentCompilation.name}" Compilation:</h2>
 			<form onSubmit={handleShare}>
 				<label>Choose user:</label>
