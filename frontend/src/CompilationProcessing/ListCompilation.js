@@ -25,7 +25,12 @@ function CompilationList({ compilations, title, isSelf, isShared }) {
 		<h2>{title}</h2>
 		<div className="list-preview">
 			{compilations.map((compilation) => (
-				<div className = 'compilation-container compilation' key = {compilation.id}>
+				<div className = {classNames('compilation-container compilation',
+					{'low-completeness' : 	 compilation.completeness >= 20 && compilation.completeness < 40},
+					{'medium-completeness' : compilation.completeness >= 40 && compilation.completeness < 70},
+					{'high-completeness' : 	 compilation.completeness >= 70 && compilation.completeness < 100},
+					{'done-completeness' :   compilation.completeness === 100},
+					)} key = {compilation.id}>
 					<Link onClick = {() => handleCompilationChoice(compilation.id)} to = "/compilation">
 						<h2>{compilation.name}</h2>
 						<h3>Completeness: {compilation.completeness} %</h3>

@@ -18,12 +18,18 @@ const AuthorizedNavbar = () => {
 			<div className="links">
 				<div className="dropdown">
 					<p>New</p>
-					<div className = "dropdown-content">
+					<div className = "dropdown-content" style = {{	left: "-25px"}}>
 						<Link to = "/new-compilation">Compilation</Link>
 						<Link to = "/new-task"> Task</Link>
 					</div>
 				</div> 
-                <Link to = "/">Stats</Link>
+				<div className="dropdown">
+					<p>Account</p>
+					<div className = "dropdown-content">
+						<Link to = "/">Settings</Link>
+						<Link to = "/"> Stats</Link>
+					</div>
+				</div> 
                 <Link onClick = {handleLogout} to="/" style = {{
 					color: "white",
 					backgroundColor: '#f1365d',

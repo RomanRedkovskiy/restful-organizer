@@ -25,12 +25,30 @@ const EditTask = () => {
 			status: status,
 			compilation_id: compilation_id
 		};
-		setResponse(fetchData('http://localhost:8080/tasks', 'PUT', editTask));
+		fetch('http://localhost:8080/tasks', {
+			method: "PUT",
+			headers: {
+				"Access-Control-Allow-Headers" : "Content-Type",
+				"Access-Control-Allow-Origin": "*",
+				'Content-Type': 'application/json',
+				"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
+				"Cache-Control": "no-cache"
+			},
+			body: JSON.stringify(editTask)
+		}).then(res => {
+			if(!res.ok){
+				throw Error('Could not fetch data for a server');
+			}
+			return res.json();
+		}).then(fetchedData => {
+			setResponse(fetchedData);
+			console.log(fetchedData);
+		});
 	}
 
 	useEffect(() => {
 		if(response !== ""){
-			setTimeout(history.push('/compilation'), 200);
+			history.push('/compilation');
 		}
 	}, [response]);
 

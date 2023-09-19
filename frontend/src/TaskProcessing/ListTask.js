@@ -6,12 +6,6 @@ import useFetch from "../Fetches/useFetch";
 import { BiEdit } from 'react-icons/bi';
 import {RiDeleteBinLine} from 'react-icons/ri';
 
-{/* Changeable styling (use later)
-<div className = {classNames('entity-container task',
-{'completed' : task.status === "Completed"},
-{'inprogress' : task.status === "In Progress"}
-)} key={task.id}> */}
-
 function TaskList({ tasks, title, id, completeness }) {
 
 	const currentId = useId();
@@ -52,7 +46,10 @@ function TaskList({ tasks, title, id, completeness }) {
 			{tasks.length > 0 && (
 			<>
 			{tasks.map((task) => (
-				<div className = "entity-container task-container" key={task.id}>
+				<div className = {classNames('entity-container task-container',
+					{'medium-completeness' : task.status === 'In Progress'},
+					{'done-completeness' :   task.status === 'Completed'},
+				)} key={task.id}>
 					<Link onClick = {() => handleTaskChoice(task.id)} to = "/task">
 						<h2>{task.title}</h2>
 						<p> {truncateTextWithEllipsis(task.description, 50)}</p>
