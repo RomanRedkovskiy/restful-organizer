@@ -130,6 +130,7 @@
       <workItem from="1694429781536" duration="99000" />
       <workItem from="1694726027077" duration="657000" />
       <workItem from="1694975321588" duration="470000" />
+      <workItem from="1695130191496" duration="886000" />
     </task>
     <task id="LOCAL-00001" summary="Add Safe Delete Method">
       <created>1694081705937</created>
@@ -159,7 +160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1694975628877</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added conditional styling according to compilation completeness or task status &#10;Updated fetch method for EditTask component&#10;NavBar Link Stats was replaced by dropdown Account, which expands by Settings and Stats Links">
+      <created>1695130385809</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1695130385809</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,7 +178,8 @@
     <MESSAGE value="Added Share Compilation Request&#10;Supported share parameter: readOnly&#10;Added UserCompilation Entity, that represents user_compilation db table.&#10;User &lt;-&gt; Compilation @ManyToMany relation was replaced by 2 @OneToMany relations using UserCompilation Entity" />
     <MESSAGE value="Added edit, share and delete for compilation (filtered by self, share, readonly)&#10;Added edit and delete for task&#10;Added inability to edit, share and delete for readonly compilations, edit and delete for tasks of readonly compilations" />
     <MESSAGE value="Fixed fetchData logic in all cases of fetching data from back-end&#10;Add taskForm for adding and editing tasks&#10;Fixed issue, when after editing or adding compilation or task, changes weren't displayed immediately in redirected page&#10;Changed login and registration logic according to new fetchData logic&#10;Changed maximal task description length from 256 to 2000" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed fetchData logic in all cases of fetching data from back-end&#10;Add taskForm for adding and editing tasks&#10;Fixed issue, when after editing or adding compilation or task, changes weren't displayed immediately in redirected page&#10;Changed login and registration logic according to new fetchData logic&#10;Changed maximal task description length from 256 to 2000" />
+    <MESSAGE value="Added conditional styling according to compilation completeness or task status &#10;Updated fetch method for EditTask component&#10;NavBar Link Stats was replaced by dropdown Account, which expands by Settings and Stats Links" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added conditional styling according to compilation completeness or task status &#10;Updated fetch method for EditTask component&#10;NavBar Link Stats was replaced by dropdown Account, which expands by Settings and Stats Links" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
