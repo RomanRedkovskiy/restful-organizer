@@ -4,7 +4,51 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd813b19-95f9-4bee-bbc8-f7fb529b6643" name="Changes" comment="" />
+    <list default="true" id="fd813b19-95f9-4bee-bbc8-f7fb529b6643" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/statistic-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/src/main/java/com/example/statisticservice/StatisticServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/src/main/java/com/example/statisticservice/config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/src/main/java/com/example/statisticservice/config/RabbiMQConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/src/main/java/com/example/statisticservice/model/Statistic.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/statistic-service/src/test/java/com/example/statisticservice/StatisticServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/auxillary/AppError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/auxillary/UserCompilationId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/controller/CompilationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/controller/TaskController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/controller/UserCompilationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/dto/CompilationDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/dto/TaskDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/dto/UserCompilationDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/dto/UserDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/model/Compilation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/model/Task.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/model/UserCompilation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/repository/CompilationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/repository/TaskRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/repository/UserCompilationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/CompilationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/CompilationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/TaskService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/TaskServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/UserCompilationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/UserCompilationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/main/java/com/example/taskservice/service/UserServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/task-service/src/test/java/com/example/taskservice/ApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/example/userservice/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/main/java/com/example/userservice/config/RabbiMQConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/test/java/com/example/userservice/ApplicationTests.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -131,6 +175,7 @@
       <workItem from="1694726027077" duration="657000" />
       <workItem from="1694975321588" duration="470000" />
       <workItem from="1695130191496" duration="886000" />
+      <workItem from="1696870356781" duration="559000" />
     </task>
     <task id="LOCAL-00001" summary="Add Safe Delete Method">
       <created>1694081705937</created>
@@ -167,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695130385809</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added and configured users and statistics microservices&#10;Temporarily added opportunity to send messages from task service to user service via RestTemplate&#10;Added dependencies for every service to work with RabbitMQ&#10;Added initial configuration of RabbiMQ connection">
+      <created>1696870751975</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1696870751976</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,7 +231,8 @@
     <MESSAGE value="Added edit, share and delete for compilation (filtered by self, share, readonly)&#10;Added edit and delete for task&#10;Added inability to edit, share and delete for readonly compilations, edit and delete for tasks of readonly compilations" />
     <MESSAGE value="Fixed fetchData logic in all cases of fetching data from back-end&#10;Add taskForm for adding and editing tasks&#10;Fixed issue, when after editing or adding compilation or task, changes weren't displayed immediately in redirected page&#10;Changed login and registration logic according to new fetchData logic&#10;Changed maximal task description length from 256 to 2000" />
     <MESSAGE value="Added conditional styling according to compilation completeness or task status &#10;Updated fetch method for EditTask component&#10;NavBar Link Stats was replaced by dropdown Account, which expands by Settings and Stats Links" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added conditional styling according to compilation completeness or task status &#10;Updated fetch method for EditTask component&#10;NavBar Link Stats was replaced by dropdown Account, which expands by Settings and Stats Links" />
+    <MESSAGE value="Added and configured users and statistics microservices&#10;Temporarily added opportunity to send messages from task service to user service via RestTemplate&#10;Added dependencies for every service to work with RabbitMQ&#10;Added initial configuration of RabbiMQ connection" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added and configured users and statistics microservices&#10;Temporarily added opportunity to send messages from task service to user service via RestTemplate&#10;Added dependencies for every service to work with RabbitMQ&#10;Added initial configuration of RabbiMQ connection" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
