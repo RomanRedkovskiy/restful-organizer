@@ -5,6 +5,7 @@ import com.example.taskservice.model.Task;
 import com.example.taskservice.repository.CompilationRepository;
 import com.example.taskservice.repository.TaskRepository;
 import com.example.taskservice.dto.TaskDto;
+import com.example.taskservice.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto saveDtoToTask(TaskDto dto, Task task) {
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
-        task.setStatus(dto.getStatus());
+        task.setStatus(Status.fromString(dto.getStatus()));
         task.setCompilation(compilationRepository.findById(dto.getCompilation_id()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Compilation with id " + dto.getCompilation_id()
                         + " can't be found")));
@@ -94,7 +95,7 @@ public class TaskServiceImpl implements TaskService {
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
-                task.getStatus(),
+                task.getStatus().toString(),
                 task.getCompilation().getId()
         );
     }

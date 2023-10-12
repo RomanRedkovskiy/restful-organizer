@@ -1,11 +1,13 @@
 package com.example.taskservice.service;
 
+import com.example.taskservice.config.RabbitMQConfig;
 import com.example.taskservice.dto.UserDto;
 import com.example.taskservice.model.User;
 import com.example.taskservice.repository.UserRepository;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
 
     @Override
     public Iterable<User> findAllUsers() {
@@ -114,12 +117,7 @@ public class UserServiceImpl implements UserService {
         user.setName(dto.getName());
         user.setLogin(dto.getLogin());
         user.setPassword(dto.getPassword());
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-        ResponseEntity<UserDto> entity =
-                restTemplate.postForEntity("http://localhost:8081/users/create", dto, UserDto.class);
-        System.out.println(entity);
+
         userRepository.save(user);
         return userToDto(user);
     }

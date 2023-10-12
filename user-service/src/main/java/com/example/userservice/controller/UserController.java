@@ -13,7 +13,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@RequestBody User user) {
         userService.create(user);

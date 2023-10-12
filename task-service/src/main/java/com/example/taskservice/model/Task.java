@@ -1,5 +1,6 @@
 package com.example.taskservice.model;
 
+import com.example.taskservice.util.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -12,7 +13,8 @@ public class Task {
     private String title;
     @Column(length = 2000)
     private String description;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private boolean isDeleted = false;
 
     @JsonBackReference
@@ -20,7 +22,7 @@ public class Task {
     @JoinColumn(name = "compilation_id", referencedColumnName = "id")
     private Compilation compilation;
 
-    public Task(String title, String description, String status, Compilation compilation) {
+    public Task(String title, String description, Status status, Compilation compilation) {
         this.title = title;
         this.description = description;
         this.status = status;
@@ -62,11 +64,11 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() {
+    public Enum<Status> getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -92,7 +94,7 @@ public class Task {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
+                ", status='" + status.toString() + '\'' +
                 '}';
     }
 }

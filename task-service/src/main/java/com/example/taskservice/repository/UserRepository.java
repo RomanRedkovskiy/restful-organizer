@@ -16,8 +16,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findUserByNameAndIsDeleted(String name, boolean is_deleted);
 
-    Optional<User> findUserByNameAndLoginAndPasswordAndIsDeleted(String name,
-                                                                 String login,
-                                                                 String password,
-                                                                 boolean is_deleted);
+    Optional<User> findUserByNameAndLoginAndPasswordAndIsDeleted(String name, String login,
+                                                                 String password, boolean is_deleted);
 }

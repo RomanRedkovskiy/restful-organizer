@@ -1,9 +1,11 @@
 package com.example.taskservice.controller;
 
+import com.example.taskservice.config.RabbitMQConfig;
 import com.example.taskservice.dto.CompilationDto;
 import com.example.taskservice.dto.UserDto;
 import com.example.taskservice.service.CompilationService;
 import com.example.taskservice.service.UserService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class UserController {
 
     @Autowired
     private CompilationService compilationService;
+
+    @Autowired
+    private RabbitTemplate template;
 
     @GetMapping("")
     public Iterable<UserDto> getCompilation() {
