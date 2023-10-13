@@ -14,8 +14,10 @@ public class RabbitMQConfig {
 
     public static final String TASK_QUEUE = "taskChangeQueue";
     public static final String COMPILATION_QUEUE = "compilationChangeQueue";
+    public static final String USER_QUEUE = "userChangeQueue";
     public static final String TASK_ROUTING_KEY = "taskChangeRoutingKey";
     public static final String COMPILATION_ROUTING_KEY = "compilationChangeRoutingKey";
+    public static final String USER_ROUTING_KEY = "userChangeRoutingKey";
     public static final String EXCHANGE = "organizerExchange";
 
     @Bean
@@ -26,6 +28,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue compilationQueue() {
         return new Queue(COMPILATION_QUEUE);
+    }
+
+    @Bean
+    public Queue userQueue() {
+        return new Queue(USER_QUEUE);
     }
 
     @Bean
@@ -41,6 +48,11 @@ public class RabbitMQConfig {
     @Bean
     public Binding compilationBinding(Queue compilationQueue, TopicExchange exchange) {
         return BindingBuilder.bind(compilationQueue).to(exchange).with(COMPILATION_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding userBinding(Queue userQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(userQueue).to(exchange).with(USER_ROUTING_KEY);
     }
 
     @Bean

@@ -5,6 +5,7 @@ import com.example.userservice.dto.UserDtoForStatistic;
 import com.example.userservice.dto.UserDtoForTask;
 import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
+import com.example.userservice.util.ChangeUserMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void sendUserDataToMessageBroker(User user){
-        UserDtoForStatistic userDtoForStatistic = new UserDtoForStatistic(user.getId());
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, userDtoForStatistic);
+        UserDtoForStatistic userDtoForStatistic = new UserDtoForStatistic(user.getId(), ChangeUserMessage.REGISTER);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, userDtoForStatistic);
     }
 }

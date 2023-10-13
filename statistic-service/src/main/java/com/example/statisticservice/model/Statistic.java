@@ -8,15 +8,23 @@ public class Statistic {
 
     @Id
     private Long userId;
-    private int completedCompilations = 0;
-    private int inProgressCompilations = 0;
-    private int uncompletedCompilations = 0;
-    private int completedTasks = 0;
-    private int inProgressTasks = 0;
-    private int uncompletedTasks = 0;
+    private int completedCompilations;
+    private int inProgressCompilations;
+    private int uncompletedCompilations;
+    private int completedTasks;
+    private int inProgressTasks;
+    private int uncompletedTasks;
+    private boolean isDeleted;
 
     public Statistic(Long userId) {
         this.userId = userId;
+        this.completedCompilations = 0;
+        this.inProgressCompilations = 0;
+        this.uncompletedCompilations = 0;
+        this.completedTasks = 0;
+        this.inProgressTasks = 0;
+        this.uncompletedTasks = 0;
+        this.isDeleted = false;
     }
 
     public Statistic(){
@@ -77,5 +85,13 @@ public class Statistic {
 
     public void setUncompletedTasks(int uncompletedTasks) {
         this.uncompletedTasks = uncompletedTasks;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

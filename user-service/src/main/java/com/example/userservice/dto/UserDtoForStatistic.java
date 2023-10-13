@@ -1,18 +1,30 @@
 package com.example.userservice.dto;
 
+import com.example.userservice.util.ChangeUserMessage;
+
 public class UserDtoForStatistic {
 
-    private Long id;
+    private Long userId;
+    private ChangeUserMessage message;
 
-    public UserDtoForStatistic(Long id) {
-        this.id = id;
+    public UserDtoForStatistic(Long userId, ChangeUserMessage message) {
+        this.userId = userId;
+        this.message = message;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public ChangeUserMessage getMessage() {
+        return message;
+    }
+
+    public void setMessage(ChangeUserMessage message) {
+        this.message = message;
     }
 }
