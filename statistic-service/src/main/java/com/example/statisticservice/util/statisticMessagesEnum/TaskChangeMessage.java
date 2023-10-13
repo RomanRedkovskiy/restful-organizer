@@ -1,5 +1,5 @@
 package com.example.statisticservice.util.statisticMessagesEnum;
 
-public enum ChangeCompilationMessage {
-    ADD, DELETE
+public enum TaskChangeMessage {
+    ADD, EDIT, DELETE
 }

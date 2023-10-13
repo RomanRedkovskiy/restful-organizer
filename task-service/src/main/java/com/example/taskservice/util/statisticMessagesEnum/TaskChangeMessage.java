@@ -1,5 +1,5 @@
 package com.example.taskservice.util.statisticMessagesEnum;
 
-public enum ChangeUserMessage {
-    REGISTER, DELETE
+public enum TaskChangeMessage {
+    ADD, EDIT, DELETE
 }

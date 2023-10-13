@@ -19,4 +19,10 @@ public class UserController {
         userService.create(user);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable final Long id){
+        userService.deleteUserById(id);
+    }
+
 }

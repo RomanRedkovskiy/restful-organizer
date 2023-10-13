@@ -1,13 +1,13 @@
 package com.example.userservice.dto;
 
-import com.example.userservice.util.ChangeUserMessage;
+import com.example.userservice.util.UserChangeMessage;
 
-public class UserDtoForStatistic {
+public class UserForStatisticDto {
 
     private Long userId;
-    private ChangeUserMessage message;
+    private UserChangeMessage message;
 
-    public UserDtoForStatistic(Long userId, ChangeUserMessage message) {
+    public UserForStatisticDto(Long userId, UserChangeMessage message) {
         this.userId = userId;
         this.message = message;
     }
@@ -20,11 +20,11 @@ public class UserDtoForStatistic {
         this.userId = userId;
     }
 
-    public ChangeUserMessage getMessage() {
+    public UserChangeMessage getMessage() {
         return message;
     }
 
-    public void setMessage(ChangeUserMessage message) {
+    public void setMessage(UserChangeMessage message) {
         this.message = message;
     }
 }

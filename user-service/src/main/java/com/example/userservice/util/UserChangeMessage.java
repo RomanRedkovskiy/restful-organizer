@@ -1,5 +1,5 @@
 package com.example.userservice.util;
 
-public enum ChangeUserMessage {
+public enum UserChangeMessage {
     REGISTER, DELETE
 }

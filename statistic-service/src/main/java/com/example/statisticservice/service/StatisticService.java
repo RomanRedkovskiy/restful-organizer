@@ -1,13 +1,21 @@
 package com.example.statisticservice.service;
 
+import com.example.statisticservice.dto.UserChangeDto;
 import com.example.statisticservice.model.Statistic;
 
 public interface StatisticService {
 
-    Statistic createStatistic(Long id);
+    Statistic findStatisticById(Long id);
 
-/*    void consumeChangeTaskFromQueue(ChangeTaskDescription changeTaskDescription);
+    void createStatisticById(Long id);
 
-    void consumeChangeCompilationFromQueue(ChangeCompilationDescription changeCompilationDescription);*/
+    void saveStatistic(Statistic statistic);
+
+    void deleteStatisticById(Long id);
+
+
+    //methods to consume data from RabbitMQ
+    void consumeChangeUserFromQueue(UserChangeDto user);
+
 
 }

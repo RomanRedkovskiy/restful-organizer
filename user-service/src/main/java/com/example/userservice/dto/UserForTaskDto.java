@@ -1,11 +1,11 @@
 package com.example.userservice.dto;
 
-public class UserDtoForTask {
+public class UserForTaskDto {
 
     private Long id;
     private String name;
 
-    public UserDtoForTask(Long id, String name) {
+    public UserForTaskDto(Long id, String name) {
         this.id = id;
         this.name = name;
     }

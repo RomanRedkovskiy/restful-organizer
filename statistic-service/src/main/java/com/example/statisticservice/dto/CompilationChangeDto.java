@@ -1,16 +1,16 @@
 package com.example.statisticservice.dto;
 
-import com.example.statisticservice.util.statisticMessagesEnum.ChangeCompilationMessage;
+import com.example.statisticservice.util.statisticMessagesEnum.CompilationChangeMessage;
 import com.example.statisticservice.util.Status;
 
 import java.util.List;
 
 public class CompilationChangeDto {
     private Long userId;
-    private ChangeCompilationMessage message;
+    private CompilationChangeMessage message;
     private List<Status> statusList;
 
-    public CompilationChangeDto(Long userId, ChangeCompilationMessage message,
+    public CompilationChangeDto(Long userId, CompilationChangeMessage message,
                                 List<Status> statusList) {
         this.userId = userId;
         this.message = message;
@@ -28,11 +28,11 @@ public class CompilationChangeDto {
         this.userId = userId;
     }
 
-    public ChangeCompilationMessage getMessage() {
+    public CompilationChangeMessage getMessage() {
         return message;
     }
 
-    public void setMessage(ChangeCompilationMessage message) {
+    public void setMessage(CompilationChangeMessage message) {
         this.message = message;
     }
 

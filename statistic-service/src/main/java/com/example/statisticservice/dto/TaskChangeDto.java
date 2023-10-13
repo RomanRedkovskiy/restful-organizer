@@ -1,16 +1,16 @@
 package com.example.statisticservice.dto;
 
-import com.example.statisticservice.util.statisticMessagesEnum.ChangeTaskMessage;
+import com.example.statisticservice.util.statisticMessagesEnum.TaskChangeMessage;
 import com.example.statisticservice.util.Status;
 
 public class TaskChangeDto {
 
     private Long userId;
-    private ChangeTaskMessage message;
+    private TaskChangeMessage message;
     private Status prevStatus;
     private Status currStatus;
 
-    public TaskChangeDto(Long userId, ChangeTaskMessage message,
+    public TaskChangeDto(Long userId, TaskChangeMessage message,
                          Status prevStatus, Status currStatus) {
         this.userId = userId;
         this.message = message;
@@ -29,11 +29,11 @@ public class TaskChangeDto {
         this.userId = userId;
     }
 
-    public ChangeTaskMessage getMessage() {
+    public TaskChangeMessage getMessage() {
         return message;
     }
 
-    public void setMessage(ChangeTaskMessage message) {
+    public void setMessage(TaskChangeMessage message) {
         this.message = message;
     }
 
