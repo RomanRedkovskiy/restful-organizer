@@ -5,24 +5,22 @@ import com.example.taskservice.model.User;
 
 public interface UserService {
 
+    UserDto create(UserDto dto);
+
+    void delete(Long id);
+
+    User findUserById(Long id);
+
     Iterable<User> findAllUsers();
 
-    Iterable<UserDto> findAllDtos();
+    Iterable<UserDto> findAllUserDtos();
 
     Iterable<User> findAllUsersExceptId(Long id);
 
     Iterable<UserDto> findAllDtosExceptId(Long id);
 
-    User findUserById(Long id);
-
-    UserDto checkUserDataCorrectness(UserDto dto);
-
-    UserDto findDtoById(Long id);
-
-    UserDto create(UserDto dto);
+    UserDto findUserDtoById(Long id);
 
     UserDto update(UserDto dto);
-
-    void delete(Long id);
 
 }

@@ -8,18 +8,17 @@ import java.util.Set;
 
 @Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @Id
     private Long id;
+
     private String name;
-    private String login;
-    private String password;
-    private boolean isDeleted = false;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private Set<UserCompilation> compilations = new HashSet<>();
+
+    boolean isDeleted = false;
 
     public User() {
     }
@@ -38,22 +37,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Set<UserCompilation> getCompilations() {

@@ -4,15 +4,15 @@ import com.example.taskservice.util.statisticMessagesEnum.CompilationChangeMessa
 import com.example.taskservice.util.Status;
 
 import java.util.List;
+import java.util.Set;
 
 public class CompilationChangeDto {
-    private Long userId;
+    private Set<Long> userIds;
     private CompilationChangeMessage message;
     private List<Status> statusList;
 
-    public CompilationChangeDto(Long userId, CompilationChangeMessage message,
-                                List<Status> statusList) {
-        this.userId = userId;
+    public CompilationChangeDto(Set<Long> userIds, CompilationChangeMessage message, List<Status> statusList) {
+        this.userIds = userIds;
         this.message = message;
         this.statusList = statusList;
     }
@@ -20,12 +20,12 @@ public class CompilationChangeDto {
     public CompilationChangeDto() {
     }
 
-    public Long getUserId() {
-        return userId;
+    public Set<Long> getUserIds() {
+        return userIds;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserIds(Set<Long> userIds) {
+        this.userIds = userIds;
     }
 
     public CompilationChangeMessage getMessage() {

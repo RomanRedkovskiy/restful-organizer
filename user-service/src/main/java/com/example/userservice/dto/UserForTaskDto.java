@@ -10,6 +10,10 @@ public class UserForTaskDto {
         this.name = name;
     }
 
+    public UserForTaskDto() {
+
+    }
+
     public Long getId() {
         return id;
     }

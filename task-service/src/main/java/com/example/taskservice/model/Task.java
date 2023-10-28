@@ -64,7 +64,7 @@ public class Task {
         this.description = description;
     }
 
-    public Enum<Status> getStatus() {
+    public Status getStatus() {
         return status;
     }
 

@@ -1,0 +1,25 @@
+package com.example.statisticservice.service;
+
+import com.example.statisticservice.util.jwt.JwtData;
+import com.example.statisticservice.util.jwt.JwtHandler;
+import com.example.statisticservice.util.jwt.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service("securityService")
+public class SecurityService {
+
+    @Autowired
+    StatisticService statisticService;
+
+    public boolean hasRole(String header) {
+        Optional<JwtData> jwtOptional = JwtHandler.parseHeader(header);
+        if (jwtOptional.isEmpty()) {
+            return false;
+        }
+        JwtData jwtData = jwtOptional.get();
+        return (jwtData.getRole() == Role.USER || jwtData.getRole() == Role.ADMIN) && !jwtData.isExpired();
+    }
+}

@@ -8,6 +8,8 @@ public interface UserService {
 
     User create(User user);
 
+    boolean checkUserDataCorrectness(User dto);
+
     void saveUser(User user);
 
     void deleteUserById(Long id);

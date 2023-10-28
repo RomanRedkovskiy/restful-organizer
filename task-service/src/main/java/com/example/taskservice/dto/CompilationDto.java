@@ -4,22 +4,19 @@ public class CompilationDto {
 
     private Long id;
     private String name;
-    private byte completeness = 0;
     private Long user_id;
 
     public CompilationDto() {
     }
 
-    public CompilationDto(Long id, String name, byte completeness) {
+    public CompilationDto(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.completeness = completeness;
     }
 
     public CompilationDto(Long id, String name, byte completeness, Long user_id) {
         this.id = id;
         this.name = name;
-        this.completeness = completeness;
         this.user_id = user_id;
     }
 
@@ -37,14 +34,6 @@ public class CompilationDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public byte getCompleteness() {
-        return completeness;
-    }
-
-    public void setCompleteness(byte completeness) {
-        this.completeness = completeness;
     }
 
     public Long getUser_id() {

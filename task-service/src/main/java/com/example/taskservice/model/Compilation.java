@@ -21,13 +21,14 @@ public class Compilation {
     private Set<UserCompilation> users = new HashSet<>();
 
     private String name;
-    private byte completeness;
-    private boolean isDeleted = false;
+    private int completeness;
+    private boolean isDeleted;
 
-    public Compilation(Long id, String name, byte completeness) {
+    public Compilation(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.completeness = completeness;
+        this.completeness = 0;
+        this.isDeleted = false;
     }
 
     public Compilation() {
@@ -53,14 +54,6 @@ public class Compilation {
         this.name = name;
     }
 
-    public byte getCompleteness() {
-        return completeness;
-    }
-
-    public void setCompleteness(byte completeness) {
-        this.completeness = completeness;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
@@ -73,6 +66,13 @@ public class Compilation {
         this.tasks = tasks;
     }
 
+    public int getCompleteness() {
+        return completeness;
+    }
+
+    public void setCompleteness(int completeness) {
+        this.completeness = completeness;
+    }
 
     public Set<UserCompilation> getUsers() {
         return users;
@@ -87,7 +87,6 @@ public class Compilation {
         return "Compilation{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", completeness=" + completeness +
                 '}';
     }
 }

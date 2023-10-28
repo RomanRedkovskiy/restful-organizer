@@ -2,15 +2,13 @@ package com.example.statisticservice.model;
 
 import jakarta.persistence.*;
 
+import com.example.statisticservice.util.Status;
 
 @Entity
 public class Statistic {
 
     @Id
     private Long userId;
-    private int completedCompilations;
-    private int inProgressCompilations;
-    private int uncompletedCompilations;
     private int completedTasks;
     private int inProgressTasks;
     private int uncompletedTasks;
@@ -18,9 +16,6 @@ public class Statistic {
 
     public Statistic(Long userId) {
         this.userId = userId;
-        this.completedCompilations = 0;
-        this.inProgressCompilations = 0;
-        this.uncompletedCompilations = 0;
         this.completedTasks = 0;
         this.inProgressTasks = 0;
         this.uncompletedTasks = 0;
@@ -37,30 +32,6 @@ public class Statistic {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public int getCompletedCompilations() {
-        return completedCompilations;
-    }
-
-    public void setCompletedCompilations(int completedCompilations) {
-        this.completedCompilations = completedCompilations;
-    }
-
-    public int getInProgressCompilations() {
-        return inProgressCompilations;
-    }
-
-    public void setInProgressCompilations(int inProgressCompilations) {
-        this.inProgressCompilations = inProgressCompilations;
-    }
-
-    public int getUncompletedCompilations() {
-        return uncompletedCompilations;
-    }
-
-    public void setUncompletedCompilations(int uncompletedCompilations) {
-        this.uncompletedCompilations = uncompletedCompilations;
     }
 
     public int getCompletedTasks() {
@@ -93,5 +64,20 @@ public class Statistic {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public void incrementTaskCount(Status status) {
+        switch (status) {
+            case COMPLETED -> this.completedTasks++;
+            case IN_PROGRESS -> this.inProgressTasks++;
+            case UNCOMPLETED -> this.uncompletedTasks++;
+        }
+    }
+    public void decrementTaskCount(Status status) {
+        switch (status) {
+            case COMPLETED -> this.completedTasks--;
+            case IN_PROGRESS -> this.inProgressTasks--;
+            case UNCOMPLETED -> this.uncompletedTasks--;
+        }
     }
 }
