@@ -4,7 +4,8 @@ public class CompilationDto {
 
     private Long id;
     private String name;
-    private Long user_id;
+    private int completeness;
+    private Long userId;
 
     public CompilationDto() {
     }
@@ -12,12 +13,13 @@ public class CompilationDto {
     public CompilationDto(Long id, String name) {
         this.id = id;
         this.name = name;
+        this.completeness = 0;
     }
 
-    public CompilationDto(Long id, String name, byte completeness, Long user_id) {
+    public CompilationDto(Long id, String name, int completeness) {
         this.id = id;
         this.name = name;
-        this.user_id = user_id;
+        this.completeness = completeness;
     }
 
     public Long getId() {
@@ -36,11 +38,19 @@ public class CompilationDto {
         this.name = name;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public int getCompleteness() {
+        return completeness;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setCompleteness(int completeness) {
+        this.completeness = completeness;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

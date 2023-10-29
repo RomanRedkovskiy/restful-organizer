@@ -2,11 +2,12 @@ export default function fetchData(url, method, body) {
 	fetch(url, {
 		method: method,
 		headers: {
-			"Access-Control-Allow-Headers" : "Content-Type",
+			"Authorization": localStorage.getItem('Token'),
+			"Access-Control-Allow-Headers" : "Content-Type, Authorization",
+			"Access-Control-Expose-Headers": "Authorization",
 			"Access-Control-Allow-Origin": "*",
 			'Content-Type': 'application/json',
-			"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
-			"Cache-Control": "no-cache"
+			"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH"
 		},
 		body: JSON.stringify(body)
 	}).then(res => {

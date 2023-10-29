@@ -11,10 +11,12 @@ export default function CompilationDelete() {
 		fetch('http://localhost:8080/tasks/' + currentId.taskId, {
 			method: 'DELETE',
 			headers: {
-				"Access-Control-Allow-Headers" : "Content-Type",
+				"Authorization": localStorage.getItem('Token'),
+				"Access-Control-Allow-Headers" : "Content-Type, Authorization",
+				"Access-Control-Expose-Headers": "Authorization",
 				"Access-Control-Allow-Origin": "*",
-			    'Content-Type': 'application/json',
-				"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH"
+				'Content-Type': 'application/json',
+				"Access-Control-Allow-Methods": "OPTIONS, DELETE"
 			}
 		}).then(() => {
 			history.push('/compilation');

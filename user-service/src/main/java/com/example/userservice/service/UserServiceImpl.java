@@ -6,8 +6,11 @@ import com.example.userservice.dto.UserForTaskDto;
 import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.util.UserChangeMessage;
+import com.example.userservice.util.jwt.JwtHandler;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -46,10 +49,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkUserDataCorrectness(User dto) {
+    public User checkUserDataCorrectness(User dto) {
         Optional<User> user = userRepository.findUserByNameAndLoginAndPasswordAndIsDeleted(dto.getName(),
                 dto.getLogin(), dto.getPassword(), false);
-        return user.isPresent();
+        return user.orElseGet(() -> entityValidationFailure(dto));
     }
 
     @Override
@@ -67,9 +70,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public void sendRegisteredUserDataToTaskService(User user){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
         UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
+        HttpEntity<UserForTaskDto> entity = new HttpEntity<>(userDtoForTask, headers);
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.postForEntity(taskServiceAddress, userDtoForTask, UserForTaskDto.class);
+        restTemplate.postForEntity(taskServiceAddress, entity, UserForTaskDto.class);
     }
 
     public void sendDeletedUserDataToTaskService(Long id){

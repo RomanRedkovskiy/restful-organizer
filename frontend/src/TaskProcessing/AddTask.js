@@ -20,7 +20,14 @@ const NewTask = () => {
 		};
 		fetch('http://localhost:8080/tasks', {
 			method: 'POST',
-			headers: { "Content-Type": "application/json" },
+			headers: { 
+				"Authorization": localStorage.getItem('Token'),
+				"Access-Control-Allow-Headers" : "Content-Type, Authorization",
+				"Access-Control-Expose-Headers": "Authorization",
+				"Access-Control-Allow-Origin": "*",
+				'Content-Type': 'application/json',
+				"Access-Control-Allow-Methods": "OPTIONS, POST"
+			},
 			body: JSON.stringify(task)
 		}).then(() => {
 			console.log("new task added");

@@ -155,12 +155,12 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto compilationToDto(Compilation compilation) {
-        return new CompilationDto(compilation.getId(), compilation.getName());
+        return new CompilationDto(compilation.getId(), compilation.getName(), compilation.getCompleteness());
     }
 
     @Override
     public CompilationDto saveDtoToCompilation(CompilationDto dto, Compilation compilation) {
-        User user = userService.findUserById(dto.getUser_id());
+        User user = userService.findUserById(dto.getUserId());
         compilation.setName(dto.getName());
         compilationRepository.save(compilation);
         saveUserCompilation(user, compilation, false, false);

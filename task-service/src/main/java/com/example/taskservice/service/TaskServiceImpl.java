@@ -140,16 +140,16 @@ public class TaskServiceImpl implements TaskService {
         compilationRepository.save(compilation);
     }
 
-    byte calculateCompleteness(Long id) {
+    int calculateCompleteness(Long id) {
         Iterable<Task> tasks = findTasksByCompilationId(id);
         int taskCount = 0;
         int completedCount = 0;
         int inProgressCount = 0;
         for (Task task : tasks) {
             taskCount++;
-            if (task.getStatus().toString().equals("In Progress")) {
+            if (task.getStatus().equals(Status.IN_PROGRESS)) {
                 inProgressCount++;
-            } else if (task.getStatus().toString().equals("Completed")) {
+            } else if (task.getStatus().equals(Status.COMPLETED)) {
                 completedCount++;
             }
         }
@@ -158,7 +158,6 @@ public class TaskServiceImpl implements TaskService {
         }
         float taskValue = 100f / taskCount;
         float completeness = taskValue * (completedCount + inProgressCount / 2f);
-        return (byte) completeness;
+        return (int) completeness;
     }
-
 }

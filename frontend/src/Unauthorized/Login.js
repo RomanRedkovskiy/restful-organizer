@@ -29,24 +29,25 @@ const Login = () => {
   const handleLogin = (login, password, name) => (e) => {
     let user = {login, password, name};
     e.preventDefault();
-	fetch("http://localhost:8080/users/login", {
+	fetch("http://localhost:8081/users/login", {
 		method: "POST",
 		headers: {
 			"Access-Control-Allow-Headers" : "Content-Type",
 			"Access-Control-Allow-Origin": "*",
 			'Content-Type': 'application/json',
-			"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
+			"Access-Control-Allow-Methods": "OPTIONS,POST",
 			"Cache-Control": "no-cache"
 		},
 		body: JSON.stringify(user)
 	}).then(res => {
 		if(!res.ok){
 			throw Error('Could not fetch data for a server');
-		}
+		} 
+		const headerValue = res.headers.get('Authorization');
+		localStorage.setItem('Token', headerValue);
 		return res.json();
 	}).then(fetchedData => {
 		setData(fetchedData);
-		console.log(fetchedData);
 	});
   }
 

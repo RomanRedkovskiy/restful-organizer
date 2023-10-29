@@ -8,7 +8,7 @@ public interface UserService {
 
     User create(User user);
 
-    boolean checkUserDataCorrectness(User dto);
+    User checkUserDataCorrectness(User dto);
 
     void saveUser(User user);
 

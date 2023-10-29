@@ -7,11 +7,14 @@ const useFetch = (url) => {
 
 	useEffect(() => {
 		const abortCont = new AbortController();
-		fetch(url, {signal: abortCont.signal}, {
+		fetch(url, {
+			signal: abortCont.signal,
 			headers: {
-				"Access-Control-Allow-Headers" : "Content-Type",
+				"Authorization": localStorage.getItem('Token'),
+				"Access-Control-Allow-Headers" : "Content-Type, Authorization",
+				"Access-Control-Expose-Headers": "Authorization",
 				"Access-Control-Allow-Origin": "*",
-			    'Content-Type': 'application/json',
+				'Content-Type': 'application/json',
 				"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT"
 			},
 		}).then(res => {

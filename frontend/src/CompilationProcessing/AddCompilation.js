@@ -16,7 +16,7 @@ const AddCompilation = () => {
 	function handleAdd(currentName) {
 		const compilation = {
 		  name: currentName,
-		  user_id: currentId.userId
+		  userId: currentId.userId
 		};
 		setResponse(fetchData('http://localhost:8080/compilations', 'POST', compilation));
 	}

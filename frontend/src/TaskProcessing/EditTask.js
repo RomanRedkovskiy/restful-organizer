@@ -28,11 +28,12 @@ const EditTask = () => {
 		fetch('http://localhost:8080/tasks', {
 			method: "PUT",
 			headers: {
-				"Access-Control-Allow-Headers" : "Content-Type",
+				"Authorization": localStorage.getItem('Token'),
+				"Access-Control-Allow-Headers" : "Content-Type, Authorization",
+				"Access-Control-Expose-Headers": "Authorization",
 				"Access-Control-Allow-Origin": "*",
 				'Content-Type': 'application/json',
-				"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
-				"Cache-Control": "no-cache"
+				"Access-Control-Allow-Methods": "OPTIONS, PUT"
 			},
 			body: JSON.stringify(editTask)
 		}).then(res => {

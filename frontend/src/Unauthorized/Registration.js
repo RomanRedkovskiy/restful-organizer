@@ -30,13 +30,13 @@ const Registration = () => {
 	const handleRegistration = (login, password, name) => (e) => {
 		let user = {login, password, name};
 		e.preventDefault();
-		fetch("http://localhost:8080/users", {
+		fetch("http://localhost:8081/users", {
 			method: "POST",
 			headers: {
 				"Access-Control-Allow-Headers" : "Content-Type",
 				"Access-Control-Allow-Origin": "*",
 				'Content-Type': 'application/json',
-				"Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE",
+				"Access-Control-Allow-Methods": "OPTIONS,POST",
 				"Cache-Control": "no-cache"
 			},
 			body: JSON.stringify(user)
@@ -44,6 +44,8 @@ const Registration = () => {
 			if(!res.ok){
 				throw Error('Could not fetch data for a server');
 			}
+			const headerValue = res.headers.get('Authorization');
+			localStorage.setItem('Token', headerValue);
 			return res.json();
 		}).then(fetchedData => {
 			setData(fetchedData);

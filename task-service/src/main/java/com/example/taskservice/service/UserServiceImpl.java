@@ -101,6 +101,4 @@ public class UserServiceImpl implements UserService {
                 .map(this::userToDto) // apply method to each task
                 .collect(Collectors.toList()); // collect the result into a list (or any other collection)
     }
-
-
 }

@@ -18,16 +18,18 @@ public class UserController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addUser(HttpServletResponse response, @RequestBody User user) {
+    public User addUser(HttpServletResponse response, @RequestBody User user) {
         response.setHeader("Authorization", JwtHandler.generateAuthorizationHeader());
-        userService.create(user);
+        return userService.create(user);
     }
 
     @PostMapping("/login")
-    public void checkLoginCorrectness(HttpServletResponse response, @RequestBody User userDto){
-        if(userService.checkUserDataCorrectness(userDto)){
+    public User checkLoginCorrectness(HttpServletResponse response, @RequestBody User user){
+        user = userService.checkUserDataCorrectness(user);
+        if(user.getId() != -1){
             response.setHeader("Authorization", JwtHandler.generateAuthorizationHeader());
         }
+        return user;
     }
 
     @PreAuthorize("@securityService.hasRole(#header)")
