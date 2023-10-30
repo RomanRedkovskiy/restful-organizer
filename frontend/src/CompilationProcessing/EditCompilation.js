@@ -17,10 +17,10 @@ const CompilationEdit = () => {
 	function handleEdit(currentName) {
 		const userCompilation = {
 		  name: currentName,
-		  compilation_id: currentId.compilationId,
-		  user_id: currentId.userId,
-		  is_shared: currentId.isShared,
-		  read_only: false
+		  compilationId: currentId.compilationId,
+		  userId: currentId.userId,
+		  isShared: currentId.isShared,
+		  readOnly: false
 		};
 		setResponse(fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation));
 	}

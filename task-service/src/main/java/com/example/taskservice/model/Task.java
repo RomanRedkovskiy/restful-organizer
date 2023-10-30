@@ -19,7 +19,7 @@ public class Task {
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "compilation_id", referencedColumnName = "id")
+    @JoinColumn(name = "compilationId", referencedColumnName = "id")
     private Compilation compilation;
 
     public Task(String title, String description, Status status, Compilation compilation) {

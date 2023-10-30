@@ -12,11 +12,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     List<User> findAllUsersByIdNotAndIsDeleted(Long id, boolean isDeleted);
 
-    Optional<User> findUserByNameAndIsDeleted(String name, boolean is_deleted);
+    Optional<User> findUserByNameAndIsDeleted(String name, boolean isDeleted);
 
     Optional<User> findUserByIdAndIsDeleted(Long id, boolean isDeleted);
 
     Optional<User> findUserByNameAndLoginAndPasswordAndIsDeleted(String name, String login,
-                                                                 String password, boolean is_deleted);
+                                                                 String password, boolean isDeleted);
 
 }

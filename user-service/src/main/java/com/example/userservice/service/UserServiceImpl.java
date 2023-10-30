@@ -79,8 +79,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public void sendDeletedUserDataToTaskService(Long id){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+        HttpEntity<String> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(taskServiceAddress + "/" + id);
+        restTemplate.exchange(taskServiceAddress + "/" + id, HttpMethod.DELETE, entity, String.class);
     }
 
     public void sendRegisteredUserDataToMessageBroker(User user){

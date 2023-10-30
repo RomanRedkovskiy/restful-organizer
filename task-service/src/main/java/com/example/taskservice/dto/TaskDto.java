@@ -6,17 +6,17 @@ public class TaskDto {
     private String title;
     private String description;
     private String status;
-    private Long compilation_id;
+    private Long compilationId;
 
     public TaskDto() {
     }
 
-    public TaskDto(Long id, String title, String description, String status, Long compilation_id) {
+    public TaskDto(Long id, String title, String description, String status, Long compilationId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
-        this.compilation_id = compilation_id;
+        this.compilationId = compilationId;
     }
 
     public Long getId() {
@@ -51,11 +51,11 @@ public class TaskDto {
         this.status = status;
     }
 
-    public Long getCompilation_id() {
-        return compilation_id;
+    public Long getCompilationId() {
+        return compilationId;
     }
 
-    public void setCompilation_id(Long compilation_id) {
-        this.compilation_id = compilation_id;
+    public void setCompilationId(Long compilationId) {
+        this.compilationId = compilationId;
     }
 }

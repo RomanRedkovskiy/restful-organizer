@@ -26,15 +26,15 @@ public class UserCompilationServiceImpl implements UserCompilationService {
 
     @Override
     public void update(UserCompilationDto dto) {
-        Compilation compilation = compilationService.findCompilationById(dto.getCompilation_id());
-        if (userOwnsCompilation(compilation.getId(), dto.getUser_id())) {
+        Compilation compilation = compilationService.findCompilationById(dto.getCompilationId());
+        if (userOwnsCompilation(compilation.getId(), dto.getUserId())) {
             compilation.setName(dto.getName());
             compilationService.save(compilation);
         } else {
-            compilationService.sendCompilationDataToMessageBroker(compilation, Collections.singleton(dto.getUser_id()),
+            compilationService.sendCompilationDataToMessageBroker(compilation, Collections.singleton(dto.getUserId()),
                     CompilationChangeMessage.ADD);
-            saveUserCompilation(userService.findUserById(dto.getUser_id()), compilation,
-                    dto.isRead_only(), dto.isIs_shared());
+            saveUserCompilation(userService.findUserById(dto.getUserId()), compilation,
+                    dto.isReadOnly(), dto.isShared());
         }
     }
 

@@ -1,0 +1,64 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="rename1" author="redkovskiy">
+        <renameColumn tableName="task" columnDataType="BIT(1)"
+                      oldColumnName="is_deleted" newColumnName="isDeleted"/>
+    </changeSet>
+    <changeSet id="rename2" author="redkovskiy">
+        <renameColumn tableName="task" columnDataType="BIGINT(20)"
+                      oldColumnName="compilation_id" newColumnName="compilationId"/>
+    </changeSet>
+    <changeSet id="rename3" author="redkovskiy">
+        <renameColumn tableName="compilation" columnDataType="BIT(1)"
+                      oldColumnName="is_deleted" newColumnName="isDeleted"/>
+    </changeSet>
+    <changeSet id="rename4" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIT(1)"
+                      oldColumnName="is_shared" newColumnName="isShared"/>
+    </changeSet>
+    <changeSet id="rename5" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIT(1)"
+                      oldColumnName="read_only" newColumnName="readOnly"/>
+    </changeSet>
+    <changeSet id="rename6" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIGINT(20)"
+                      oldColumnName="user_id" newColumnName="userId"/>
+    </changeSet>
+    <changeSet id="rename7" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIGINT(20)"
+                      oldColumnName="compilation_id" newColumnName="compilationId"/>
+    </changeSet>
+    <changeSet id="rename8" author="redkovskiy">
+        <renameColumn tableName="user" columnDataType="BIT(1)"
+                      oldColumnName="is_deleted" newColumnName="isDeleted"/>
+    </changeSet>
+    <changeSet id="rename9" author="redkovskiy">
+        <dropColumn tableName="compilation" columnName="is_deleted"/>
+    </changeSet>
+    <changeSet id="rename10" author="redkovskiy">
+        <dropColumn tableName="compilation" columnName="isDeleted"/>
+    </changeSet>
+    <changeSet id="delete1" author="redkovskiy">
+        <dropColumn tableName="compilation" columnName="is_deleted"/>
+    </changeSet>
+    <changeSet id="delete2" author="redkovskiy">
+        <dropColumn tableName="task" columnName="is_deleted"/>
+    </changeSet>
+    <changeSet id="delete3" author="redkovskiy">
+        <dropColumn tableName="task" columnName="compilation_id"/>
+    </changeSet>
+    <changeSet id="delete4" author="redkovskiy">
+        <dropColumn tableName="user" columnName="is_deleted"/>
+    </changeSet>
+    <changeSet id="delete6" author="redkovskiy">
+        <dropColumn tableName="user_compilation" columnName="is_shared"/>
+    </changeSet>
+    <changeSet id="delete7" author="redkovskiy">
+        <dropColumn tableName="user_compilation" columnName="compilation_id"/>
+    </changeSet>
+    <changeSet id="delete8" author="redkovskiy">
+        <dropColumn tableName="user_compilation" columnName="user_id"/>
+    </changeSet>
+</databaseChangeLog>

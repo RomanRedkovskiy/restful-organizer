@@ -16,7 +16,7 @@ const NewTask = () => {
 			title: title,
 			description: description,
 			status: status,
-			compilation_id: compilation_id
+			compilationId: compilation_id
 		};
 		fetch('http://localhost:8080/tasks', {
 			method: 'POST',

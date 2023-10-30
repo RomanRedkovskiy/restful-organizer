@@ -61,6 +61,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>4.24.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.restful-organizer-utils</groupId>
 			<artifactId>jwt-utils</artifactId>
 			<version>1.0-SNAPSHOT</version>

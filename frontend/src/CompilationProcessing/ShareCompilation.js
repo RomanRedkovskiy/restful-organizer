@@ -11,10 +11,10 @@ const CompilationShare = () => {
 	function handleShare(){
 		const userCompilation = {
 		  name: currentCompilation.name,
-		  compilation_id: currentCompilation.id,
-		  user_id: selectedId,
-		  is_shared: true,
-		  read_only: isReadOnly
+		  compilationId: currentCompilation.id,
+		  userId: selectedId,
+		  isShared: true,
+		  readOnly: isReadOnly
 		};
 		// Use then method to wait for fetch to finish
 		setResponse(fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation));

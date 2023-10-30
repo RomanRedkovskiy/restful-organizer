@@ -8,8 +8,8 @@ import jakarta.persistence.*;
 public class UserCompilation {
     @EmbeddedId
     private UserCompilationId id;
-    private boolean read_only = false;
-    private boolean is_shared = false;
+    private boolean readOnly = false;
+    private boolean isShared = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
@@ -24,10 +24,10 @@ public class UserCompilation {
     public UserCompilation() {
     }
 
-    public UserCompilation(UserCompilationId id, boolean read_only, boolean is_shared, User user, Compilation compilation) {
+    public UserCompilation(UserCompilationId id, boolean readOnly, boolean isShared, User user, Compilation compilation) {
         this.id = id;
-        this.read_only = read_only;
-        this.is_shared = is_shared;
+        this.readOnly = readOnly;
+        this.isShared = isShared;
         this.user = user;
         this.compilation = compilation;
     }
@@ -56,19 +56,19 @@ public class UserCompilation {
         this.compilation = compilation;
     }
 
-    public boolean isRead_only() {
-        return read_only;
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
-    public void setRead_only(boolean read_only) {
-        this.read_only = read_only;
+    public void setReadOnly(boolean read_only) {
+        this.readOnly = read_only;
     }
 
-    public boolean isIs_shared() {
-        return is_shared;
+    public boolean isIsShared() {
+        return isShared;
     }
 
-    public void setIs_shared(boolean is_shared) {
-        this.is_shared = is_shared;
+    public void setIsShared(boolean is_shared) {
+        this.isShared = is_shared;
     }
 }

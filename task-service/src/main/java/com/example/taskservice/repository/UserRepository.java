@@ -8,12 +8,12 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
-    List<User> findByIsDeleted(boolean is_deleted);
+    List<User> findByIsDeleted(boolean isDeleted);
 
-    List<User> findAllByIdNotAndIsDeleted(Long id, boolean is_deleted);
+    List<User> findAllByIdNotAndIsDeleted(Long id, boolean isDeleted);
 
-    Optional<User> findUserByIdAndIsDeleted(Long id, boolean is_deleted);
+    Optional<User> findUserByIdAndIsDeleted(Long id, boolean isDeleted);
 
-    Optional<User> findUserByNameAndIsDeleted(String name, boolean is_deleted);
+    Optional<User> findUserByNameAndIsDeleted(String name, boolean isDeleted);
 
 }

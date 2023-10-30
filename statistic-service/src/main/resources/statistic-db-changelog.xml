@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet id="change1" author="redkovskiy">
+        <renameColumn tableName="statistic" columnDataType="INT(11)"
+                      oldColumnName="completed_tasks" newColumnName="completedTasks"/>
+   </changeSet>
+    <changeSet id="change2" author="redkovskiy">
+        <renameColumn tableName="statistic" columnDataType="INT(11)"
+                      oldColumnName="in_progress_tasks" newColumnName="inProgressTasks"/>
+    </changeSet>
+    <changeSet id="change3" author="redkovskiy">
+        <renameColumn tableName="statistic" columnDataType="INT(11)"
+                      oldColumnName="uncompleted_tasks" newColumnName="uncompletedTasks"/>
+    </changeSet>
+    <changeSet id="change4" author="redkovskiy">
+        <renameColumn tableName="statistic" columnDataType="BIT(1)"
+                      oldColumnName="is_deleted" newColumnName="isDeleted"/>
+    </changeSet>
+</databaseChangeLog>

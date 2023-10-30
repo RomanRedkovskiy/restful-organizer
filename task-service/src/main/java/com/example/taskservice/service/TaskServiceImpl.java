@@ -65,14 +65,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto create(TaskDto dto) {
         Task task = new Task();
-        sendNewTaskDataToMessageBroker(dto.getCompilation_id(), Status.fromString(dto.getStatus()));
+        sendNewTaskDataToMessageBroker(dto.getCompilationId(), Status.fromString(dto.getStatus()));
         return saveDtoToTask(dto, task);
     }
 
     @Override
     public TaskDto update(TaskDto dto) {
         Task task = findTaskById(dto.getId());
-        sendEditedTaskDataToMessageBroker(dto.getCompilation_id(), task.getStatus(), Status.fromString(dto.getStatus()));
+        sendEditedTaskDataToMessageBroker(dto.getCompilationId(), task.getStatus(), Status.fromString(dto.getStatus()));
         return saveDtoToTask(dto, task);
     }
 
@@ -89,8 +89,8 @@ public class TaskServiceImpl implements TaskService {
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         task.setStatus(Status.fromString(dto.getStatus()));
-        task.setCompilation(compilationRepository.findById(dto.getCompilation_id()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Compilation with id " + dto.getCompilation_id()
+        task.setCompilation(compilationRepository.findById(dto.getCompilationId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Compilation with id " + dto.getCompilationId()
                         + " can't be found")));
         taskRepository.save(task);
         processCompilationChange(task.getCompilation().getId());
