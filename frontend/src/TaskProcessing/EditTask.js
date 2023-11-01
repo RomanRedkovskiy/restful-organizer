@@ -15,15 +15,15 @@ const EditTask = () => {
 	const {data: task, isLoading, error} =
 		useFetch('http://localhost:8080/tasks/' + currentId.taskId);
 
-	const handleEdit = (id, title, description, status, compilation_id) => (e) => {
-		setId(currentId.userId, compilation_id, currentId.taskId, currentId.isShared);
+	const handleEdit = (id, title, description, status, compilationId) => (e) => {
+		setId(currentId.userId, compilationId, currentId.taskId, currentId.isShared);
 		e.preventDefault();
 		const editTask = {
 			id: id,
 			title: title,
 			description: description,
 			status: status,
-			compilationId: compilation_id
+			compilationId: compilationId
 		};
 		fetch('http://localhost:8080/tasks', {
 			method: "PUT",
@@ -63,7 +63,7 @@ const EditTask = () => {
 					title = {task.title}
 					description = {task.description}
 					status = {task.status}
-					compilationId = {task.compilation_id}
+					compilationId = {task.compilationId}
 					action = 'Edit' 
 					handleSubmit={handleEdit}
 				/>

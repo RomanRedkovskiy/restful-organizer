@@ -6,6 +6,7 @@ import com.example.statisticservice.dto.UserChangeDto;
 import com.example.statisticservice.model.Statistic;
 import com.example.statisticservice.util.Status;
 import com.example.statisticservice.util.statisticMessagesEnum.CompilationChangeMessage;
+import org.springframework.http.HttpEntity;
 
 import java.util.List;
 import java.util.Set;
@@ -29,11 +30,11 @@ public interface StatisticService {
     void processCompilationChangeById(Long userId, List<Status> statusList, CompilationChangeMessage message);
 
     //methods to consume data from RabbitMQ
-    void consumeUserDtoFromQueue(UserChangeDto userDto);
+    void consumeUserDtoFromQueue(HttpEntity<UserChangeDto> entity);
 
-    void consumeTaskDtoFromQueue(TaskChangeDto taskDto);
+    void consumeTaskDtoFromQueue(HttpEntity<TaskChangeDto> entity);
 
-    void consumeCompilationDtoFromQueue(CompilationChangeDto compilationDto);
+    void consumeCompilationDtoFromQueue(HttpEntity<CompilationChangeDto> entity);
 
 
 }

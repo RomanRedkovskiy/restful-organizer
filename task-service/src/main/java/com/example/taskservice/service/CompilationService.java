@@ -53,6 +53,6 @@ public interface CompilationService {
             CompilationChangeMessage message
     );
 
-    List<Status> getStatusListFromCompilation(Set<Task> taskList);
+    List<Status> getStatusListFromCompilation(List<Task> taskList);
 
 }

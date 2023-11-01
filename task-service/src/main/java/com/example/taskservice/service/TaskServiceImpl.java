@@ -1,6 +1,7 @@
 package com.example.taskservice.service;
 
 import com.example.taskservice.config.RabbitMQConfig;
+import com.example.taskservice.dto.statisticDto.CompilationChangeDto;
 import com.example.taskservice.dto.statisticDto.TaskChangeDto;
 import com.example.taskservice.model.Compilation;
 import com.example.taskservice.model.Task;
@@ -8,9 +9,12 @@ import com.example.taskservice.repository.CompilationRepository;
 import com.example.taskservice.repository.TaskRepository;
 import com.example.taskservice.dto.TaskDto;
 import com.example.taskservice.util.Status;
+import com.example.taskservice.util.jwt.JwtHandler;
 import com.example.taskservice.util.statisticMessagesEnum.TaskChangeMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -117,19 +121,37 @@ public class TaskServiceImpl implements TaskService {
     public void sendNewTaskDataToMessageBroker(Long compilationId, Status currStatus){
         Set<Long> userIds = compilationService.findAllUserIdsThatOwnCurrentCompilation(compilationId);
         TaskChangeDto newTaskDto = new TaskChangeDto(userIds, TaskChangeMessage.ADD, null, currStatus);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, newTaskDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
+        HttpEntity<TaskChangeDto> entity = new HttpEntity<>(newTaskDto, headers);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, entity);
     }
 
     public void sendEditedTaskDataToMessageBroker(Long compilationId, Status prevStatus, Status currStatus){
         Set<Long> userIds = compilationService.findAllUserIdsThatOwnCurrentCompilation(compilationId);
         TaskChangeDto changeTaskDto = new TaskChangeDto(userIds, TaskChangeMessage.EDIT, prevStatus, currStatus);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, changeTaskDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
+        HttpEntity<TaskChangeDto> entity = new HttpEntity<>(changeTaskDto, headers);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, entity);
     }
 
     public void sendDeletedTaskDataToMessageBroker(Long compilationId, Status prevStatus){
         Set<Long> userIds = compilationService.findAllUserIdsThatOwnCurrentCompilation(compilationId);
         TaskChangeDto deleteTaskDto = new TaskChangeDto(userIds, TaskChangeMessage.DELETE, prevStatus, null);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, deleteTaskDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
+        HttpEntity<TaskChangeDto> entity = new HttpEntity<>(deleteTaskDto, headers);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, entity);
     }
 
     void processCompilationChange(Long id) {

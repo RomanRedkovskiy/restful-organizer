@@ -19,7 +19,7 @@ const CompilationEdit = () => {
 		  name: currentName,
 		  compilationId: currentId.compilationId,
 		  userId: currentId.userId,
-		  isShared: currentId.isShared,
+		  shared: currentId.isShared,
 		  readOnly: false
 		};
 		setResponse(fetchData('http://localhost:8080/update_compilation', 'PUT', userCompilation));

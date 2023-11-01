@@ -1,10 +1,15 @@
 package com.example.taskservice.auxillary;
 
+import jakarta.persistence.Column;
+
 import java.io.Serializable;
 
 public class UserCompilationId implements Serializable {
 
+    @Column(name = "userId")
     private Long userId;
+
+    @Column(name = "compilationId")
     private Long compilationId;
 
     public UserCompilationId() {

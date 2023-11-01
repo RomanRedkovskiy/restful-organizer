@@ -61,4 +61,42 @@
     <changeSet id="delete8" author="redkovskiy">
         <dropColumn tableName="user_compilation" columnName="user_id"/>
     </changeSet>
+    <changeSet id="rename11" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIGINT(20)"
+                      oldColumnName="userId" newColumnName="user_id"/>
+    </changeSet>
+    <changeSet id="rename12" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIGINT(20)"
+                      oldColumnName="compilationId" newColumnName="compilation_id"/>
+    </changeSet>
+    <changeSet id="rename13" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIT(1)"
+                      oldColumnName="isShared" newColumnName="is_shared"/>
+    </changeSet>
+    <changeSet id="rename14" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIT(1)"
+                      oldColumnName="readOnly" newColumnName="read_only"/>
+    </changeSet>
+    <changeSet id="delete9" author="redkovskiy">
+        <dropColumn tableName="user_compilation" columnName="isShared"/>
+    </changeSet>
+    <changeSet id="delete10" author="redkovskiy">
+        <dropColumn tableName="user_compilation" columnName="readOnly"/>
+    </changeSet>
+    <changeSet id="rename15" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIT(1)"
+                      oldColumnName="is_shared" newColumnName="isShared"/>
+    </changeSet>
+    <changeSet id="rename16" author="redkovskiy">
+        <renameColumn tableName="user_compilation" columnDataType="BIT(1)"
+                      oldColumnName="read_only" newColumnName="readOnly"/>
+    </changeSet>
+    <changeSet id="addNamedAdmin" author="redkovskiy">
+        <insert tableName="user">
+            <column name="id" value="20"/>
+            <column name="name" value="Roman Redkovskiy"/>
+            <column name="isAdmin" valueNumeric="1"/>
+            <column name="isDeleted" valueNumeric="0"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

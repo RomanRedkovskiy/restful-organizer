@@ -8,15 +8,15 @@ const NewTask = () => {
 	const currentId = useId();
 	const setId = useIdUpdate();
 
-	const handleAdd = (id, title, description, status, compilation_id) => (e) => {
-		setId(currentId.userId, compilation_id, currentId.taskId, currentId.isShared);
+	const handleAdd = (id, title, description, status, compilationId) => (e) => {
+		setId(currentId.userId, compilationId, currentId.taskId, currentId.isShared);
 		e.preventDefault();
 		const task = {		
 			id: id,
 			title: title,
 			description: description,
 			status: status,
-			compilationId: compilation_id
+			compilationId: compilationId
 		};
 		fetch('http://localhost:8080/tasks', {
 			method: 'POST',

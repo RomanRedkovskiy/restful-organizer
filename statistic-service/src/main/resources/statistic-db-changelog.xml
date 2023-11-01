@@ -18,4 +18,17 @@
         <renameColumn tableName="statistic" columnDataType="BIT(1)"
                       oldColumnName="is_deleted" newColumnName="isDeleted"/>
     </changeSet>
+    <changeSet id="change5" author="redkovskiy">
+        <renameColumn tableName="statistic" columnDataType="BIGINT(20)"
+                      oldColumnName="user_id" newColumnName="userId"/>
+    </changeSet>
+    <changeSet id="addNamedAdmin" author="redkovskiy">
+        <insert tableName="statistic">
+            <column name="userId" valueNumeric="20"/>
+            <column name="completedTasks" valueNumeric="0"/>
+            <column name="inProgressTasks" valueNumeric="0"/>
+            <column name="uncompletedTasks" valueNumeric="0"/>
+            <column name="isDeleted" valueNumeric="0"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

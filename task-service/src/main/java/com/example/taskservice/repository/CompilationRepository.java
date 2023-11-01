@@ -11,8 +11,8 @@ import java.util.Optional;
 public interface CompilationRepository extends CrudRepository<Compilation, Long> {
     List<Compilation> findAllByIsDeleted(boolean is_deleted);
 
-    @Query(value = "SELECT c.* FROM compilation c JOIN user_compilation uc ON c.id = uc.compilationId " +
-            "WHERE uc.userId = :userId AND uc.isShared = :isShared AND uc.readOnly = :readOnly " +
+    @Query(value = "SELECT c.* FROM compilation c JOIN user_compilation uc ON c.id = uc.compilation_id " +
+            "WHERE uc.user_id = :userId AND uc.isShared = :isShared AND uc.readOnly = :readOnly " +
             "AND c.isDeleted = :isDeleted", nativeQuery = true)
     List<Compilation> findCompilationsByUserIdAndParams(@Param("userId") Long userId,
                                                         @Param("isShared") boolean isShared,

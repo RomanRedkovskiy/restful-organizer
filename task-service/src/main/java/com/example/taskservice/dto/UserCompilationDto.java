@@ -5,17 +5,17 @@ public class UserCompilationDto {
     private String name;
     private Long compilationId;
     private Long userId;
-    private boolean isShared = false;
-    private boolean readOnly = false;
+    private boolean shared;
+    private boolean readOnly;
 
     public UserCompilationDto() {
     }
 
-    public UserCompilationDto(String name, Long userId, Long compilationId, boolean isShared, boolean readOnly) {
+    public UserCompilationDto(String name, Long userId, Long compilationId, boolean shared, boolean readOnly) {
         this.name = name;
         this.userId = userId;
         this.compilationId = compilationId;
-        this.isShared = isShared;
+        this.shared = shared;
         this.readOnly = readOnly;
     }
 
@@ -44,11 +44,11 @@ public class UserCompilationDto {
     }
 
     public boolean isShared() {
-        return isShared;
+        return shared;
     }
 
-    public void setShared(boolean shared) {
-        this.isShared = shared;
+    public void setShared(boolean isShared) {
+        this.shared = isShared;
     }
 
     public boolean isReadOnly() {

@@ -13,7 +13,7 @@ const CompilationShare = () => {
 		  name: currentCompilation.name,
 		  compilationId: currentCompilation.id,
 		  userId: selectedId,
-		  isShared: true,
+		  shared: true,
 		  readOnly: isReadOnly
 		};
 		// Use then method to wait for fetch to finish

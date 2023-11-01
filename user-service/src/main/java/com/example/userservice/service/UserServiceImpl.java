@@ -70,10 +70,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public void sendRegisteredUserDataToTaskService(User user){
+        UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
-        UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
+
         HttpEntity<UserForTaskDto> entity = new HttpEntity<>(userDtoForTask, headers);
+
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.postForEntity(taskServiceAddress, entity, UserForTaskDto.class);
     }
@@ -81,19 +84,33 @@ public class UserServiceImpl implements UserService {
     public void sendDeletedUserDataToTaskService(Long id){
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
         HttpEntity<String> entity = new HttpEntity<>(headers);
+
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.exchange(taskServiceAddress + "/" + id, HttpMethod.DELETE, entity, String.class);
     }
 
     public void sendRegisteredUserDataToMessageBroker(User user){
         UserForStatisticDto userForStatisticDto = new UserForStatisticDto(user.getId(), UserChangeMessage.REGISTER);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, userForStatisticDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
+        HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, headers);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, entity);
     }
 
     public void sendDeletedUserDataToMessageBroker(Long id){
         UserForStatisticDto userForStatisticDto = new UserForStatisticDto(id, UserChangeMessage.DELETE);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, userForStatisticDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
+        HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, headers);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, entity);
     }
 
     boolean isUsernameTaken(User user) {

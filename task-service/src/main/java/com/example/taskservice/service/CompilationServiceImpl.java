@@ -12,9 +12,12 @@ import com.example.taskservice.repository.CompilationRepository;
 import com.example.taskservice.repository.TaskRepository;
 import com.example.taskservice.repository.UserCompilationRepository;
 import com.example.taskservice.util.Status;
+import com.example.taskservice.util.jwt.JwtHandler;
 import com.example.taskservice.util.statisticMessagesEnum.CompilationChangeMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -182,16 +185,22 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public void sendCompilationDataToMessageBroker(Compilation compilation, Set<Long> userIds,
                                                    CompilationChangeMessage message) {
-        CompilationChangeDto compilationData = new CompilationChangeDto(
-                userIds,
-                message,
-                getStatusListFromCompilation(compilation.getTasks())
+        CompilationChangeDto compilationData = new CompilationChangeDto(userIds, message,
+                getStatusListFromCompilation(taskRepository.findAllByCompilationIdAndIsDeleted(
+                        compilation.getId(),
+                        false))
         );
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, compilationData);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+
+        HttpEntity<CompilationChangeDto> entity = new HttpEntity<>(compilationData, headers);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, entity);
     }
 
     @Override
-    public List<Status> getStatusListFromCompilation(Set<Task> taskList) {
+    public List<Status> getStatusListFromCompilation(List<Task> taskList) {
         List<Status> statusList = new ArrayList<>();
         for (Task task : taskList) {
             statusList.add(task.getStatus());

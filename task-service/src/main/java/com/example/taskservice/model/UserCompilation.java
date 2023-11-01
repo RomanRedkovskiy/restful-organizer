@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "user_compilation")
 public class UserCompilation {
     @EmbeddedId
     private UserCompilationId id;
