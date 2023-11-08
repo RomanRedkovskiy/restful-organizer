@@ -51,7 +51,7 @@ function TaskList({ tasks, title, id, completeness }) {
 					{'done-completeness' :   task.status === 'Completed'},
 				)} key={task.id}>
 					<Link onClick = {() => handleTaskChoice(task.id)} to = "/task">
-						<h2>{task.title}</h2>
+						<h2>{truncateTextWithEllipsis(task.title, 35)}</h2>
 						<p> {truncateTextWithEllipsis(task.description, 50)}</p>
 					</Link>
 					{!isReadOnly && <>

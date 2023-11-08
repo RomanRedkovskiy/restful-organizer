@@ -11,6 +11,8 @@ public interface UserService {
 
     User findUserById(Long id);
 
+    String getUserNameById(Long id);
+
     Iterable<User> findAllUsers();
 
     Iterable<UserDto> findAllUserDtos();
@@ -20,6 +22,8 @@ public interface UserService {
     Iterable<UserDto> findAllDtosExceptId(Long id);
 
     UserDto findUserDtoById(Long id);
+
+    boolean isAdmin(Long id);
 
     UserDto update(UserDto dto);
 

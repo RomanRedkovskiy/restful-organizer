@@ -1,8 +1,9 @@
 package com.example.statisticservice.service;
 
-import com.example.statisticservice.dto.CompilationChangeDto;
-import com.example.statisticservice.dto.TaskChangeDto;
-import com.example.statisticservice.dto.UserChangeDto;
+import com.example.statisticservice.dto.StatisticDto;
+import com.example.statisticservice.dto.messageBrokerDtos.CompilationChangeDto;
+import com.example.statisticservice.dto.messageBrokerDtos.TaskChangeDto;
+import com.example.statisticservice.dto.messageBrokerDtos.UserChangeDto;
 import com.example.statisticservice.model.Statistic;
 import com.example.statisticservice.repository.StatisticRepository;
 import com.example.statisticservice.config.RabbitMQConfig;
@@ -16,13 +17,16 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
@@ -48,7 +52,8 @@ public class StatisticServiceImpl implements StatisticService {
     public void consumeUserDtoFromQueue(HttpEntity<UserChangeDto> entity) {
         processDtoFromQueue(entity, (userDto) -> {
             switch (userDto.getMessage()) {
-                case REGISTER -> createStatisticById(userDto.getUserId());
+                case REGISTER -> createStatisticById(userDto);
+                case CHANGE -> changeStatisticById(userDto);
                 case DELETE -> deleteStatisticById(userDto.getUserId());
             }
         });
@@ -95,7 +100,7 @@ public class StatisticServiceImpl implements StatisticService {
             return;
         }
         JwtData jwtData = optionalJwtData.get();
-        if ((jwtData.getRole() != Role.USER && jwtData.getRole() != Role.ADMIN) || jwtData.isExpired()){
+        if ((jwtData.getRole() != Role.USER && jwtData.getRole() != Role.ADMIN) || jwtData.isExpired()) {
             return;
         }
         dtoConsumer.accept(dto);
@@ -114,8 +119,46 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public void createStatisticById(Long id) {
-        Statistic userStat = new Statistic(id);
+    public StatisticDto getStatisticDto(Long id) {
+        Statistic statistic = findStatisticById(id);
+        return statToStatDto(statistic);
+    }
+
+    @Override
+    public StatisticDto statToStatDto(Statistic statistic) {
+        int completedTasks = statistic.getCompletedTasks();
+        int inProgressTasks = statistic.getInProgressTasks();
+        int uncompletedTasks = statistic.getUncompletedTasks();
+        int overallTasks = completedTasks + inProgressTasks + uncompletedTasks;
+        float taskValue = 100f / overallTasks;
+        int completeness = (int) (taskValue * (completedTasks + inProgressTasks / 2f));
+        return new StatisticDto(statistic.getUserName(), completedTasks, inProgressTasks,
+                uncompletedTasks, overallTasks, completeness);
+    }
+
+    @Override
+    public Iterable<StatisticDto> getStatisticDtos() {
+        Iterable<Statistic> stats = statisticRepository.findAllByIsDeleted(false);
+        return statListToStatDtoList(stats);
+    }
+
+    @Override
+    public Iterable<StatisticDto> statListToStatDtoList(Iterable<Statistic> statList) {
+        return StreamSupport.stream(statList.spliterator(), false)
+                .map(this::statToStatDto) // apply method to each task
+                .collect(Collectors.toList()); // collect the result into a list
+    }
+
+    @Override
+    public void createStatisticById(UserChangeDto dto) {
+        Statistic userStat = new Statistic(dto.getUserId(), dto.getUserName());
+        saveStatistic(userStat);
+    }
+
+    @Override
+    public void changeStatisticById(UserChangeDto dto) {
+        Statistic userStat = findStatisticById(dto.getUserId());
+        userStat.setUserName(dto.getUserName());
         saveStatistic(userStat);
     }
 

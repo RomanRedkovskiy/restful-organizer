@@ -1,4 +1,4 @@
-package com.example.statisticservice.dto;
+package com.example.statisticservice.dto.messageBrokerDtos;
 
 import com.example.statisticservice.util.Status;
 import com.example.statisticservice.util.statisticMessagesEnum.TaskChangeMessage;

@@ -17,8 +17,8 @@ public class UserCompilationController {
 
     @PreAuthorize("@securityService.hasRole(#header)")
     @PutMapping("")
-    public void changeCompilationName(@RequestHeader("Authorization") String header,
+    public UserCompilationDto changeCompilationName(@RequestHeader("Authorization") String header,
                                       @RequestBody UserCompilationDto userCompilationDto) {
-        userCompilationService.update(userCompilationDto);
+        return userCompilationService.update(userCompilationDto);
     }
 }

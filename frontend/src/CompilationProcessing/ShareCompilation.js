@@ -22,6 +22,8 @@ const CompilationShare = () => {
 
 	useEffect(() => {
 		if(response !== ""){
+			console.log("RESPONSE:");
+			console.log(response);
 			history.push('/compilations');
 		}
 	}, [response]);

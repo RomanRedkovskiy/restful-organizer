@@ -1,13 +1,15 @@
 import NewTask from './TaskProcessing/AddTask';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import StatsHandler from './Stats/StatsHandler';
 import TaskDetails from './TaskProcessing/DetailsTask';
 import EditTask from './TaskProcessing/EditTask';
 import DeleteTask from './TaskProcessing/DeleteTask';
 import NotFound from './NotFound';
 import StartPage from './Unauthorized/StartPage';
 import {useState} from 'react';
-import Registration from './Unauthorized/Registration';
-import Login from './Unauthorized/Login';
+import Registration from './UserProcessing/Registration';
+import ChangeUser from './UserProcessing/ChangeUser';
+import Login from './UserProcessing/Login';
 import {IdProvider} from './IdProvider';
 import CompilationProcessor from './CompilationProcessing/ProcessorCompilation';
 import CompilationDetails from './CompilationProcessing/DetailsCompilation';
@@ -25,6 +27,12 @@ function App() {
 			<Switch>
 				<Route exact path="/">
 					<StartPage />
+				</Route>
+				<Route exact path="/stats">
+					<StatsHandler/>
+				</Route>
+				<Route exact path="/settings">
+					<ChangeUser />
 				</Route>
 				<Route exact path="/new-task">
 					<NewTask />

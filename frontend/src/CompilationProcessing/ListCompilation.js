@@ -32,7 +32,8 @@ function CompilationList({ compilations, title, isSelf, isShared }) {
 					{'done-completeness' :   compilation.completeness === 100},
 					)} key = {compilation.id}>
 					<Link onClick = {() => handleCompilationChoice(compilation.id)} to = "/compilation">
-						<h2>{truncateTextWithEllipsis(compilation.name, 18)}</h2>
+						{isSelf && <h2>{truncateTextWithEllipsis(compilation.name, 18)}</h2>}
+						{!isSelf && <h2>{truncateTextWithEllipsis(compilation.name, 20)}</h2>}
 						<h3>Completeness: {compilation.completeness} %</h3>
 					</Link>
 					{isSelf && <>

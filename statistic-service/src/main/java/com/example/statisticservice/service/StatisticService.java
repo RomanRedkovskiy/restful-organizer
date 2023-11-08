@@ -1,8 +1,9 @@
 package com.example.statisticservice.service;
 
-import com.example.statisticservice.dto.CompilationChangeDto;
-import com.example.statisticservice.dto.TaskChangeDto;
-import com.example.statisticservice.dto.UserChangeDto;
+import com.example.statisticservice.dto.StatisticDto;
+import com.example.statisticservice.dto.messageBrokerDtos.CompilationChangeDto;
+import com.example.statisticservice.dto.messageBrokerDtos.TaskChangeDto;
+import com.example.statisticservice.dto.messageBrokerDtos.UserChangeDto;
 import com.example.statisticservice.model.Statistic;
 import com.example.statisticservice.util.Status;
 import com.example.statisticservice.util.statisticMessagesEnum.CompilationChangeMessage;
@@ -17,7 +18,9 @@ public interface StatisticService {
 
     void saveStatistic(Statistic statistic);
 
-    void createStatisticById(Long id);
+    void createStatisticById(UserChangeDto dto);
+
+    void changeStatisticById(UserChangeDto dto);
 
     void deleteStatisticById(Long id);
 
@@ -28,6 +31,14 @@ public interface StatisticService {
     void deleteTask(Set<Long> userId, Status prevStatus);
 
     void processCompilationChangeById(Long userId, List<Status> statusList, CompilationChangeMessage message);
+
+    StatisticDto getStatisticDto(Long id);
+
+    StatisticDto statToStatDto(Statistic statistic);
+
+    Iterable<StatisticDto> getStatisticDtos();
+
+    Iterable<StatisticDto> statListToStatDtoList(Iterable<Statistic> statList);
 
     //methods to consume data from RabbitMQ
     void consumeUserDtoFromQueue(HttpEntity<UserChangeDto> entity);

@@ -18,6 +18,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserCompilation> compilations = new HashSet<>();
 
+    boolean isAdmin = false;
+
     boolean isDeleted = false;
 
     public User() {
@@ -54,4 +56,13 @@ public class User {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 }
+

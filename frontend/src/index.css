@@ -91,7 +91,7 @@
 	padding: 8px;
 	border-radius: 8px;
 	cursor: pointer;
-	width: 100px;
+	width: 110px;
   }
 
   .not-found{
@@ -108,6 +108,18 @@
   .compilation{
 	flex: 0 0 30%;
 	margin: 20px;
+  }
+
+  .statistic{
+	display: flex;
+    justify-content: space-between;
+	flex: 0 0 60%;
+	left: 267.5px;
+  }
+
+  .statistic strong{
+	background-color: #e0dfdf;
+	justify-self: end;
   }
 
   .default-layout{

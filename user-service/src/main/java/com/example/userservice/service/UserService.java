@@ -10,6 +10,12 @@ public interface UserService {
 
     User checkUserDataCorrectness(User dto);
 
+    User update(User user);
+
+    User changeUserIfUniqueUsername(User user);
+
+    User addUserIfUniqueUsername(User user);
+
     void saveUser(User user);
 
     void deleteUserById(Long id);

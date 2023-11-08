@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getUserNameById(Long id) {
+        return findUserById(id).getName();
+    }
+
+    @Override
     public UserDto create(UserDto dto) {
         return saveDtoToUser(dto, new User());
     }
@@ -87,6 +92,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserDtoById(Long id) {
         return userToDto(findUserById(id));
+    }
+
+    @Override
+    public boolean isAdmin(Long id) {
+        User user = findUserById(id);
+        return user.isAdmin();
     }
 
     @Override

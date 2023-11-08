@@ -26,8 +26,8 @@ const AuthorizedNavbar = () => {
 				<div className="dropdown">
 					<p>Account</p>
 					<div className = "dropdown-content">
-						<Link to = "/">Settings</Link>
-						<Link to = "/"> Stats</Link>
+						<Link to = "/settings">Settings</Link>
+						<Link to = "/stats"> Stats</Link>
 					</div>
 				</div> 
                 <Link onClick = {handleLogout} to="/" style = {{

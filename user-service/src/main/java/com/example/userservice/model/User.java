@@ -11,9 +11,19 @@ public class User {
     private String name;
     private String login;
     private String password;
-    private boolean isDeleted = false;
+    private boolean isAdmin;
+    private boolean isDeleted;
 
     public User() {
+        this.isAdmin = false;
+        this.isDeleted = false;
+    }
+
+    public User(String name, String login, String password) {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.isDeleted = false;
     }
 
     public Long getId() {
@@ -46,6 +56,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public boolean isDeleted() {

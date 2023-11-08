@@ -5,10 +5,12 @@ import com.example.userservice.util.UserChangeMessage;
 public class UserForStatisticDto {
 
     private Long userId;
+    private String userName;
     private UserChangeMessage message;
 
-    public UserForStatisticDto(Long userId, UserChangeMessage message) {
+    public UserForStatisticDto(Long userId, String userName, UserChangeMessage message) {
         this.userId = userId;
+        this.userName = userName;
         this.message = message;
     }
 
@@ -26,5 +28,13 @@ public class UserForStatisticDto {
 
     public void setMessage(UserChangeMessage message) {
         this.message = message;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

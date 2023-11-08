@@ -62,6 +62,28 @@ public class UserController {
     }
 
     @PreAuthorize("@securityService.hasRole(#header)")
+    @GetMapping("/{id}/is_admin")
+    public boolean isUserAdmin(
+            @RequestHeader("Authorization") String header,
+            @PathVariable final Long id) {
+        return userService.isAdmin(id);
+    }
+
+    @PreAuthorize("@securityService.hasRole(#header)")
+    @GetMapping("/{id}/name")
+    public String getUserName(
+            @RequestHeader("Authorization") String header,
+            @PathVariable final Long id) {
+        return userService.getUserNameById(id);
+    }
+
+    @PreAuthorize("@securityService.hasRole(#header)")
+    @PutMapping("")
+    public UserDto updateUser(@RequestHeader("Authorization") String header, @RequestBody UserDto userDto) {
+        return userService.update(userDto);
+    }
+
+    @PreAuthorize("@securityService.hasRole(#header)")
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto addUser(@RequestHeader("Authorization") String header, @RequestBody UserDto userDto) {
@@ -74,15 +96,5 @@ public class UserController {
     public void deleteUser(@RequestHeader("Authorization") String header, @PathVariable final Long id) {
         userService.delete(id);
     }
-
-/*    @PostMapping("/login")
-    public UserDto checkLoginCorrectness(@RequestBody UserDto userDto){
-        return userService.checkUserDataCorrectness(userDto);
-    }
-
-    @PutMapping("")
-    public UserDto updateUser(@RequestBody UserDto userDto) {
-        return userService.update(userDto);
-    }*/
 
 }

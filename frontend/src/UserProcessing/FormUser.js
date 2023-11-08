@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function UserForm ({formText, handler}) {
-	const [login, setLogin] = useState('');
-	const [password, setPassword] = useState('');
-	const [name, setName] = useState('');
+function UserForm ({initialLogin = '', initialPassword = '', initialName = '', formText, handler}) {
+	const [login, setLogin] = useState(initialLogin);
+	const [password, setPassword] = useState(initialPassword);
+	const [name, setName] = useState(initialName);
+
+	useEffect(() => {
+		setLogin(initialLogin);
+		setPassword(initialPassword);
+		setName(initialName);
+	}, [initialLogin, initialPassword, initialName]);
+
 	return ( 
 		<div className="content create">
 			<h2>{formText}</h2>

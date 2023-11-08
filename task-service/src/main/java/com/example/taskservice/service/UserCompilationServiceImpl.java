@@ -25,7 +25,7 @@ public class UserCompilationServiceImpl implements UserCompilationService {
     UserCompilationRepository userCompilationRepository;
 
     @Override
-    public void update(UserCompilationDto dto) {
+    public UserCompilationDto update(UserCompilationDto dto) {
         Compilation compilation = compilationService.findCompilationById(dto.getCompilationId());
         if (userOwnsCompilation(compilation.getId(), dto.getUserId())) {
             compilation.setName(dto.getName());
@@ -36,6 +36,7 @@ public class UserCompilationServiceImpl implements UserCompilationService {
             saveUserCompilation(userService.findUserById(dto.getUserId()), compilation,
                     dto.isReadOnly(), dto.isShared());
         }
+        return dto;
     }
 
     public void saveUserCompilation(User user, Compilation compilation, boolean readOnly, boolean isShared) {

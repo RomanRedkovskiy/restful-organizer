@@ -9,13 +9,15 @@ public class Statistic {
 
     @Id
     private Long userId;
+    private String userName;
     private int completedTasks;
     private int inProgressTasks;
     private int uncompletedTasks;
     private boolean isDeleted;
 
-    public Statistic(Long userId) {
+    public Statistic(Long userId, String userName) {
         this.userId = userId;
+        this.userName = userName;
         this.completedTasks = 0;
         this.inProgressTasks = 0;
         this.uncompletedTasks = 0;
@@ -32,6 +34,14 @@ public class Statistic {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public int getCompletedTasks() {
