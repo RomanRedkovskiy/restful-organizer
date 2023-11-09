@@ -6,18 +6,11 @@ public interface UserService {
 
     User findUserById(Long id);
 
-    User create(User user);
-
     User checkUserDataCorrectness(User dto);
+
+    User create(User user);
 
     User update(User user);
 
-    User changeUserIfUniqueUsername(User user);
-
-    User addUserIfUniqueUsername(User user);
-
-    void saveUser(User user);
-
     void deleteUserById(Long id);
-
 }

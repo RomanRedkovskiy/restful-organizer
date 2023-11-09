@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/compilations")
 public class CompilationController {
 
-    @Autowired
-    private CompilationService compilationService;
+    private final CompilationService compilationService;
+    private final TaskService taskService;
 
     @Autowired
-    private TaskService taskService;
+    public CompilationController(CompilationService compilationService, TaskService taskService) {
+        this.compilationService = compilationService;
+        this.taskService = taskService;
+    }
 
     @PreAuthorize("@securityService.hasRole(#header)")
     @GetMapping("")

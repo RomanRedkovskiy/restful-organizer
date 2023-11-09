@@ -1,9 +1,8 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.model.User;
+import com.example.userservice.service.JwtService;
 import com.example.userservice.service.UserService;
-import com.example.userservice.util.jwt.JwtHandler;
-import com.example.userservice.util.jwt.Role;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserService userService;
+
+    private final JwtService jwtService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService, JwtService jwtService) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+    }
 
     @PreAuthorize("@securityService.hasRole(#header)")
     @GetMapping("/{id}")
@@ -27,14 +33,14 @@ public class UserController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(HttpServletResponse response, @RequestBody User user) {
-        response.setHeader("Authorization", JwtHandler.generateAuthorizationHeader(Role.USER));
+        response.setHeader("Authorization", jwtService.generateUserRegistrationHeader(user));
         return userService.create(user);
     }
 
     @PostMapping("/login")
     public User checkLoginCorrectness(HttpServletResponse response, @RequestBody User user) {
         user = userService.checkUserDataCorrectness(user);
-        response.setHeader("Authorization", JwtHandler.generateUserLoginHeader(user));
+        response.setHeader("Authorization", jwtService.generateUserLoginHeader(user));
         return user;
     }
 

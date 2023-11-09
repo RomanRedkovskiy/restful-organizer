@@ -1,25 +1,22 @@
 package com.example.statisticservice.service;
 
+import com.example.statisticservice.config.RabbitMQConfig;
 import com.example.statisticservice.dto.StatisticDto;
 import com.example.statisticservice.dto.messageBrokerDtos.CompilationChangeDto;
 import com.example.statisticservice.dto.messageBrokerDtos.TaskChangeDto;
 import com.example.statisticservice.dto.messageBrokerDtos.UserChangeDto;
 import com.example.statisticservice.model.Statistic;
 import com.example.statisticservice.repository.StatisticRepository;
-import com.example.statisticservice.config.RabbitMQConfig;
 import com.example.statisticservice.util.Consumer;
 import com.example.statisticservice.util.Status;
 import com.example.statisticservice.util.jwt.JwtData;
-import com.example.statisticservice.util.jwt.JwtHandler;
 import com.example.statisticservice.util.jwt.Role;
 import com.example.statisticservice.util.statisticMessagesEnum.CompilationChangeMessage;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -31,20 +28,28 @@ import java.util.stream.StreamSupport;
 @Service
 public class StatisticServiceImpl implements StatisticService {
 
+    private final StatisticRepository statisticRepository;
+
+    private final JwtService jwtService;
+
     @Autowired
-    private StatisticRepository statisticRepository;
+    public StatisticServiceImpl(StatisticRepository statisticRepository, JwtService jwtService) {
+        this.statisticRepository = statisticRepository;
+        this.jwtService = jwtService;
+    }
 
     private String lastToken;
 
     @Override
-    public Statistic findStatisticById(Long id) {
-        return statisticRepository.findStatisticByUserIdAndIsDeleted(id, false).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User statistic with id " + id + " can't be found"));
+    public StatisticDto getStatisticDto(Long id) {
+        Statistic statistic = findStatisticById(id);
+        return statToStatDto(statistic);
     }
 
     @Override
-    public void saveStatistic(Statistic statistic) {
-        statisticRepository.save(statistic);
+    public Iterable<StatisticDto> getStatisticDtos() {
+        Iterable<Statistic> stats = statisticRepository.findAllByIsDeleted(false);
+        return statListToStatDtoList(stats);
     }
 
     @Override
@@ -81,6 +86,85 @@ public class StatisticServiceImpl implements StatisticService {
         });
     }
 
+    private Statistic findStatisticById(Long id) {
+        return statisticRepository.findStatisticByUserIdAndIsDeleted(id, false).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "User statistic with id " + id + " can't be found"));
+    }
+
+    private void saveStatistic(Statistic statistic) {
+        statisticRepository.save(statistic);
+    }
+
+    private void processCompilationChangeById(Long userId, List<Status> statusList, CompilationChangeMessage message) {
+        Statistic statistic = findStatisticById(userId);
+        for (Status status : statusList) {
+            switch (message) {
+                case ADD -> statistic.incrementTaskCount(status);
+                case DELETE -> statistic.decrementTaskCount(status);
+            }
+        }
+        saveStatistic(statistic);
+    }
+
+    private void createStatisticById(UserChangeDto dto) {
+        Statistic userStat = new Statistic(dto.getUserId(), dto.getUserName());
+        saveStatistic(userStat);
+    }
+
+    private void changeStatisticById(UserChangeDto dto) {
+        Statistic userStat = findStatisticById(dto.getUserId());
+        userStat.setUserName(dto.getUserName());
+        saveStatistic(userStat);
+    }
+
+    private void deleteStatisticById(Long id) {
+        Statistic statistic = findStatisticById(id);
+        statistic.setDeleted(true);
+        saveStatistic(statistic);
+    }
+
+    private Iterable<StatisticDto> statListToStatDtoList(Iterable<Statistic> statList) {
+        return StreamSupport.stream(statList.spliterator(), false)
+                .map(this::statToStatDto) // apply method to each task
+                .collect(Collectors.toList()); // collect the result into a list
+    }
+
+    private StatisticDto statToStatDto(Statistic statistic) {
+        int completedTasks = statistic.getCompletedTasks();
+        int inProgressTasks = statistic.getInProgressTasks();
+        int uncompletedTasks = statistic.getUncompletedTasks();
+        int overallTasks = completedTasks + inProgressTasks + uncompletedTasks;
+        float taskValue = 100f / overallTasks;
+        int completeness = (int) (taskValue * (completedTasks + inProgressTasks / 2f));
+        return new StatisticDto(statistic.getUserName(), completedTasks, inProgressTasks,
+                uncompletedTasks, overallTasks, completeness);
+    }
+
+    private void addTask(Set<Long> userIds, Status currStatus) {
+        for (Long id : userIds) {
+            Statistic statistic = findStatisticById(id);
+            statistic.incrementTaskCount(currStatus);
+            saveStatistic(statistic);
+        }
+    }
+
+    private void editTask(Set<Long> userIds, Status prevStatus, Status currStatus) {
+        for (Long id : userIds) {
+            Statistic statistic = findStatisticById(id);
+            statistic.decrementTaskCount(prevStatus);
+            statistic.incrementTaskCount(currStatus);
+            saveStatistic(statistic);
+        }
+    }
+
+    private void deleteTask(Set<Long> userIds, Status prevStatus) {
+        for (Long id : userIds) {
+            Statistic statistic = findStatisticById(id);
+            statistic.decrementTaskCount(prevStatus);
+            saveStatistic(statistic);
+        }
+    }
+
     private <T> void processDtoFromQueue(HttpEntity<T> entity, Consumer<T> dtoConsumer) {
         Optional<String> optionalToken = Optional.ofNullable(entity.getHeaders().getFirst("Authorization"));
         Optional<T> optionalDto = Optional.ofNullable(entity.getBody());
@@ -95,7 +179,7 @@ public class StatisticServiceImpl implements StatisticService {
             return;
         }
         lastToken = token;
-        Optional<JwtData> optionalJwtData = JwtHandler.parseHeader(token);
+        Optional<JwtData> optionalJwtData = jwtService.parseHeader(token);
         if (optionalJwtData.isEmpty()) {
             return;
         }
@@ -104,94 +188,6 @@ public class StatisticServiceImpl implements StatisticService {
             return;
         }
         dtoConsumer.accept(dto);
-    }
-
-    @Override
-    public void processCompilationChangeById(Long userId, List<Status> statusList, CompilationChangeMessage message) {
-        Statistic statistic = findStatisticById(userId);
-        for (Status status : statusList) {
-            switch (message) {
-                case ADD -> statistic.incrementTaskCount(status);
-                case DELETE -> statistic.decrementTaskCount(status);
-            }
-        }
-        saveStatistic(statistic);
-    }
-
-    @Override
-    public StatisticDto getStatisticDto(Long id) {
-        Statistic statistic = findStatisticById(id);
-        return statToStatDto(statistic);
-    }
-
-    @Override
-    public StatisticDto statToStatDto(Statistic statistic) {
-        int completedTasks = statistic.getCompletedTasks();
-        int inProgressTasks = statistic.getInProgressTasks();
-        int uncompletedTasks = statistic.getUncompletedTasks();
-        int overallTasks = completedTasks + inProgressTasks + uncompletedTasks;
-        float taskValue = 100f / overallTasks;
-        int completeness = (int) (taskValue * (completedTasks + inProgressTasks / 2f));
-        return new StatisticDto(statistic.getUserName(), completedTasks, inProgressTasks,
-                uncompletedTasks, overallTasks, completeness);
-    }
-
-    @Override
-    public Iterable<StatisticDto> getStatisticDtos() {
-        Iterable<Statistic> stats = statisticRepository.findAllByIsDeleted(false);
-        return statListToStatDtoList(stats);
-    }
-
-    @Override
-    public Iterable<StatisticDto> statListToStatDtoList(Iterable<Statistic> statList) {
-        return StreamSupport.stream(statList.spliterator(), false)
-                .map(this::statToStatDto) // apply method to each task
-                .collect(Collectors.toList()); // collect the result into a list
-    }
-
-    @Override
-    public void createStatisticById(UserChangeDto dto) {
-        Statistic userStat = new Statistic(dto.getUserId(), dto.getUserName());
-        saveStatistic(userStat);
-    }
-
-    @Override
-    public void changeStatisticById(UserChangeDto dto) {
-        Statistic userStat = findStatisticById(dto.getUserId());
-        userStat.setUserName(dto.getUserName());
-        saveStatistic(userStat);
-    }
-
-    @Override
-    public void deleteStatisticById(Long id) {
-        Statistic statistic = findStatisticById(id);
-        statistic.setDeleted(true);
-        saveStatistic(statistic);
-    }
-
-    public void addTask(Set<Long> userIds, Status currStatus) {
-        for (Long id : userIds) {
-            Statistic statistic = findStatisticById(id);
-            statistic.incrementTaskCount(currStatus);
-            saveStatistic(statistic);
-        }
-    }
-
-    public void editTask(Set<Long> userIds, Status prevStatus, Status currStatus) {
-        for (Long id : userIds) {
-            Statistic statistic = findStatisticById(id);
-            statistic.decrementTaskCount(prevStatus);
-            statistic.incrementTaskCount(currStatus);
-            saveStatistic(statistic);
-        }
-    }
-
-    public void deleteTask(Set<Long> userIds, Status prevStatus) {
-        for (Long id : userIds) {
-            Statistic statistic = findStatisticById(id);
-            statistic.decrementTaskCount(prevStatus);
-            saveStatistic(statistic);
-        }
     }
 
 }

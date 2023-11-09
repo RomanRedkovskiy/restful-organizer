@@ -1,7 +1,6 @@
 package com.example.taskservice.model;
 
 import com.example.taskservice.util.Status;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,14 +9,17 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
+
     @Column(length = 2000)
     private String description;
+
     @Enumerated(EnumType.STRING)
     private Status status;
+
     private boolean isDeleted = false;
 
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "compilationId", referencedColumnName = "id")
     private Compilation compilation;
@@ -30,6 +32,7 @@ public class Task {
     }
 
     public Task() {
+
     }
 
     public Long getId() {
@@ -79,14 +82,6 @@ public class Task {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
-
-    /*    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }*/
 
     @Override
     public String toString() {

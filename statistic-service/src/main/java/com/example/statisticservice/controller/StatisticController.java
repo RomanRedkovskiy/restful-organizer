@@ -14,8 +14,11 @@ import java.util.List;
 @RequestMapping("/stats")
 public class StatisticController {
 
-    @Autowired
-    private StatisticService statisticService;
+    private final StatisticService statisticService;
+
+    public StatisticController(StatisticService statisticService) {
+        this.statisticService = statisticService;
+    }
 
     @PreAuthorize("@securityService.hasAdmin(#header)")
     @GetMapping("")

@@ -1,43 +1,9 @@
 package com.example.userservice.service;
 
-import com.example.userservice.util.jwt.JwtData;
-import com.example.userservice.util.jwt.JwtHandler;
-import com.example.userservice.util.jwt.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+public interface SecurityService {
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+    boolean hasRole(String header);
 
-@Service("securityService")
-public class SecurityService {
+    boolean hasAdmin(String header);
 
-    @Autowired
-    UserService userService;
-
-    public boolean hasRole(String header) {
-        Set<Role> roles = new HashSet<>(Set.of(Role.ADMIN, Role.USER));
-        return roleFounder(header, roles);
-    }
-
-    public boolean hasAdmin(String header){
-        Set<Role> roles = Collections.singleton(Role.ADMIN);
-        return roleFounder(header, roles);
-    }
-
-    public boolean roleFounder(String header, Set<Role> roles){
-        Optional<JwtData> jwtOptional = JwtHandler.parseHeader(header);
-        if (jwtOptional.isEmpty()) {
-            return false;
-        }
-        JwtData jwtData = jwtOptional.get();
-        for(Role role: roles){
-            if(jwtData.getRole() == role){
-                return true;
-            }
-        }
-        return false;
-    }
 }

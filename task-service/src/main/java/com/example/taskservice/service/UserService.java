@@ -13,11 +13,7 @@ public interface UserService {
 
     String getUserNameById(Long id);
 
-    Iterable<User> findAllUsers();
-
     Iterable<UserDto> findAllUserDtos();
-
-    Iterable<User> findAllUsersExceptId(Long id);
 
     Iterable<UserDto> findAllDtosExceptId(Long id);
 

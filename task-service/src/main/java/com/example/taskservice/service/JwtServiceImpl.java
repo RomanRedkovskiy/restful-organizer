@@ -1,7 +1,9 @@
-package com.example.taskservice.util.jwt;
+package com.example.taskservice.service;
 
+import com.example.taskservice.util.jwt.JwtData;
+import com.example.taskservice.util.jwt.Role;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import org.springframework.stereotype.Service;
 import utils.JwtUtils;
 
 import java.util.Optional;
@@ -9,15 +11,19 @@ import java.util.Optional;
 import static utils.JwtUtils.isTokenExpired;
 import static utils.JwtUtils.parseToken;
 
-public class JwtHandler {
+@Service
+public class JwtServiceImpl implements JwtService{
+
     private final static String prefix = "Bearer ";
 
-    public static String generateAuthorizationHeader() {
-        return prefix + JwtUtils.generateToken(Role.USER.toString, 10 * 60 * 60 * 1000);
+    @Override
+    public String generateAuthorizationHeader(Role role) {
+        return prefix + JwtUtils.generateToken(role.getString(), 10 * 60 * 60 * 1000);
     }
 
-    public static Optional<JwtData> parseHeader(String header){
-        if(!header.startsWith(prefix)) {
+    @Override
+    public Optional<JwtData> parseHeader(String header) {
+        if (!header.startsWith(prefix)) {
             return Optional.empty();
         }
         String token = header.substring(prefix.length());
@@ -31,7 +37,7 @@ public class JwtHandler {
         try {
             jwtData.setExpired(isTokenExpired(tokenBody.getExpiration()));
             jwtData.setRole(Role.fromString(tokenBody.getSubject()));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return Optional.empty();
         }
 

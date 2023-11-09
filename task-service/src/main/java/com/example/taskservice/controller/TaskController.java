@@ -1,9 +1,7 @@
 package com.example.taskservice.controller;
 
-import com.example.taskservice.service.TaskService;
 import com.example.taskservice.dto.TaskDto;
-import com.example.taskservice.util.jwt.JwtHandler;
-import jakarta.servlet.http.HttpServletResponse;
+import com.example.taskservice.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

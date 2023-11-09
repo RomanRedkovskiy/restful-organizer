@@ -1,7 +1,8 @@
 package com.example.taskservice.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,6 @@ public class User {
 
     private String name;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private Set<UserCompilation> compilations = new HashSet<>();
 
@@ -23,6 +23,7 @@ public class User {
     boolean isDeleted = false;
 
     public User() {
+
     }
 
     public Long getId() {

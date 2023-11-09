@@ -6,7 +6,6 @@ import com.example.userservice.dto.UserForTaskDto;
 import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.util.UserChangeMessage;
-import com.example.userservice.util.jwt.JwtHandler;
 import com.example.userservice.util.jwt.Role;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,18 @@ public class UserServiceImpl implements UserService {
 
     private final String taskServiceAddress = "http://localhost:8080/users";
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final JwtService jwtService;
+
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, RabbitTemplate rabbitTemplate) {
+        this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     @Override
     public User findUserById(Long id) {
@@ -37,10 +43,6 @@ public class UserServiceImpl implements UserService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User statistic with id " + id + " can't be found"));
     }
 
-    @Override
-    public User create(User user) {
-        return addUserIfUniqueUsername(user);
-    }
 
     @Override
     public User checkUserDataCorrectness(User dto) {
@@ -49,38 +51,15 @@ public class UserServiceImpl implements UserService {
         return user.orElseGet(() -> entityValidationFailure(dto));
     }
 
+
+    @Override
+    public User create(User user) {
+        return addUserIfUniqueUsername(user);
+    }
+
     @Override
     public User update(User user) {
         return changeUserIfUniqueUsername(user);
-    }
-
-    @Override
-    public User changeUserIfUniqueUsername(User user) {
-        if(isUsernameTaken(user)){
-            return entityValidationFailure(user);
-        } else {
-            saveUser(user);
-            sendChangedUserDataToTaskService(user);
-            sendChangedUserDataToMessageBroker(user);
-            return user;
-        }
-    }
-
-    @Override
-    public User addUserIfUniqueUsername(User user) {
-        if(isUsernameTaken(user)){
-            return entityValidationFailure(user);
-        } else {
-            saveUser(user);
-            sendRegisteredUserDataToTaskService(user);
-            sendRegisteredUserDataToMessageBroker(user);
-            return user;
-        }
-    }
-
-    @Override
-    public void saveUser(User user) {
-        userRepository.save(user);
     }
 
     @Override
@@ -92,64 +71,91 @@ public class UserServiceImpl implements UserService {
         saveUser(user);
     }
 
-    public void sendRegisteredUserDataToTaskService(User user){
+    private boolean isUsernameTaken(User user) {
+        return userRepository.findUserByNameAndIsDeleted(user.getName(), false).isPresent();
+    }
+
+    private void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    private User addUserIfUniqueUsername(User user) {
+        if (isUsernameTaken(user)) {
+            return entityValidationFailure(user);
+        }
+        saveUser(user);
+        sendRegisteredUserDataToTaskService(user);
+        sendRegisteredUserDataToMessageBroker(user);
+        return user;
+    }
+
+    private User changeUserIfUniqueUsername(User user) {
+        boolean wasNicknameChanged = !findUserById(user.getId()).getName().equals(user.getName());
+        if (wasNicknameChanged && isUsernameTaken(user)) {
+            return entityValidationFailure(user);
+        }
+        saveUser(user);
+        if (wasNicknameChanged) {
+            sendChangedUserDataToTaskService(user);
+            sendChangedUserDataToMessageBroker(user);
+        }
+        return user;
+    }
+
+    private void sendRegisteredUserDataToTaskService(User user) {
         UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
         HttpEntity<UserForTaskDto> entity = new HttpEntity<>(userDtoForTask, constructAuthorizationHeader());
         sendDataToTaskService(taskServiceAddress, HttpMethod.POST, entity, UserForTaskDto.class);
     }
 
-    public void sendChangedUserDataToTaskService(User user){
+    private void sendChangedUserDataToTaskService(User user) {
         UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
         HttpEntity<UserForTaskDto> entity = new HttpEntity<>(userDtoForTask, constructAuthorizationHeader());
         sendDataToTaskService(taskServiceAddress, HttpMethod.PUT, entity, UserForTaskDto.class);
     }
 
-    public void sendDeletedUserDataToTaskService(Long id){
+    private void sendDeletedUserDataToTaskService(Long id) {
         HttpEntity<String> entity = new HttpEntity<>(constructAuthorizationHeader());
         sendDataToTaskService(taskServiceAddress + "/" + id, HttpMethod.DELETE, entity, String.class);
     }
 
-    public void sendRegisteredUserDataToMessageBroker(User user){
+    private void sendRegisteredUserDataToMessageBroker(User user) {
         UserForStatisticDto userForStatisticDto =
                 new UserForStatisticDto(user.getId(), user.getName(), UserChangeMessage.REGISTER);
         HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, constructAuthorizationHeader());
         sendDataToMessageBroker(entity);
     }
 
-    public void sendChangedUserDataToMessageBroker(User user){
+    private void sendChangedUserDataToMessageBroker(User user) {
         UserForStatisticDto userForStatisticDto =
                 new UserForStatisticDto(user.getId(), user.getName(), UserChangeMessage.CHANGE);
         HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, constructAuthorizationHeader());
         sendDataToMessageBroker(entity);
     }
 
-    public void sendDeletedUserDataToMessageBroker(User user){
+    private void sendDeletedUserDataToMessageBroker(User user) {
         UserForStatisticDto userForStatisticDto =
                 new UserForStatisticDto(user.getId(), user.getName(), UserChangeMessage.DELETE);
         HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, constructAuthorizationHeader());
         sendDataToMessageBroker(entity);
     }
 
-    public void sendDataToTaskService(String url, HttpMethod method, HttpEntity<?> entity, Class<?> className){
+    private void sendDataToTaskService(String url, HttpMethod method, HttpEntity<?> entity, Class<?> className) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.exchange(url, method, entity, className);
     }
 
-    public void sendDataToMessageBroker(HttpEntity<?> entity){
+    private void sendDataToMessageBroker(HttpEntity<?> entity) {
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, entity);
     }
 
-    public HttpHeaders constructAuthorizationHeader(){
+    private HttpHeaders constructAuthorizationHeader() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", JwtHandler.generateAuthorizationHeader(Role.USER));
+        headers.set("Authorization", jwtService.generateAuthorizationHeader(Role.USER));
         return headers;
     }
 
-    boolean isUsernameTaken(User user) {
-        return userRepository.findUserByNameAndIsDeleted(user.getName(), false).isPresent();
-    }
-
-    User entityValidationFailure(User user) {
+    private User entityValidationFailure(User user) {
         user.setId((long) -1);
         return user;
     }

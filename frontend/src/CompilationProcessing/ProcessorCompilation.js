@@ -2,6 +2,7 @@ import { useId, useIdUpdate } from '../IdProvider';
 import AuthorizedNavbar from '../Navbars/NavbarAuthorized';
 import useFetch from '../Fetches/useFetch';
 import CompilationList from './ListCompilation';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 const CompilationProcessor = () => {
 	const currentId = useId();
 	const setId = useIdUpdate();
@@ -15,6 +16,12 @@ const CompilationProcessor = () => {
 		<>
 			<AuthorizedNavbar />
 			<div className="home container default-layout">
+				{selfCompilations && sharedCompilations && readonlyCompilations &&
+				 selfCompilations.length + sharedCompilations.length + readonlyCompilations.length === 0 && 
+				<div className='empty-message'>
+					<h2>You don't have any compilations yet. <Link to = "/new-compilation">Add one</Link></h2>
+				</div>	
+				}
 				{selfError && <h2>{selfError}</h2>}
 				{isSelfLoading && <h2>Loading...</h2>}
 				{selfCompilations &&  selfCompilations.length > 0 && 

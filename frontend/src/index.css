@@ -126,6 +126,14 @@
 	margin-top: 50px;
   }
 
+  .empty-message {
+	text-align: center;
+  }
+
+  .empty-message a{
+	color: #f1356d;
+  }
+  
   .task-width{
 	width: 600px;
   }

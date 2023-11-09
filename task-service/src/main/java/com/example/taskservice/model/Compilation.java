@@ -1,6 +1,5 @@
 package com.example.taskservice.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -12,23 +11,22 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "compilation")
     private Set<Task> tasks = new HashSet<>();
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "compilation")
     private Set<UserCompilation> users = new HashSet<>();
 
     private String name;
+
     private int completeness;
-    private boolean isDeleted;
+
+    private boolean isDeleted = false;
 
     public Compilation(Long id, String name) {
         this.id = id;
         this.name = name;
         this.completeness = 0;
-        this.isDeleted = false;
     }
 
     public Compilation() {

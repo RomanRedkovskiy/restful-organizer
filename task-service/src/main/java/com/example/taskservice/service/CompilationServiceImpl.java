@@ -12,7 +12,7 @@ import com.example.taskservice.repository.CompilationRepository;
 import com.example.taskservice.repository.TaskRepository;
 import com.example.taskservice.repository.UserCompilationRepository;
 import com.example.taskservice.util.Status;
-import com.example.taskservice.util.jwt.JwtHandler;
+import com.example.taskservice.util.jwt.Role;
 import com.example.taskservice.util.statisticMessagesEnum.CompilationChangeMessage;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,31 +32,28 @@ import java.util.stream.StreamSupport;
 @Service
 public class CompilationServiceImpl implements CompilationService {
 
-    @Autowired
     private final CompilationRepository compilationRepository;
 
-    @Autowired
     private final TaskRepository taskRepository;
 
-    @Autowired
-    private final UserService userService;
-
-    @Autowired
     private final UserCompilationRepository userCompilationRepository;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final UserService userService;
 
-    public CompilationServiceImpl(CompilationRepository compilationRepository, TaskRepository taskRepository, UserService userService, UserCompilationRepository userCompilationRepository) {
+    private final JwtService jwtService;
+
+    private final RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    public CompilationServiceImpl(CompilationRepository compilationRepository, TaskRepository taskRepository,
+                                  UserCompilationRepository userCompilationRepository, UserService userService,
+                                  JwtService jwtService, RabbitTemplate rabbitTemplate) {
         this.compilationRepository = compilationRepository;
         this.taskRepository = taskRepository;
-        this.userService = userService;
         this.userCompilationRepository = userCompilationRepository;
-    }
-
-    @Override
-    public Iterable<Compilation> findAllCompilations() {
-        return compilationRepository.findAllByIsDeleted(false);
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -68,11 +65,6 @@ public class CompilationServiceImpl implements CompilationService {
     public Compilation findCompilationById(Long id) {
         return compilationRepository.findCompilationByIdAndIsDeleted(id, false).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Compilation with id " + id + " can't be found"));
-    }
-
-    @Override
-    public Iterable<Task> findTasksByCompilationId(Long id) {
-        return taskRepository.findAllByCompilationIdAndIsDeleted(id, false);
     }
 
     @Override
@@ -117,15 +109,6 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public Set<Long> castUsersSetToIdsSet(Set<UserCompilation> users) {
-        Set<Long> userIds = new HashSet<>();
-        for (UserCompilation user : users) {
-            userIds.add(user.getUser().getId());
-        }
-        return userIds;
-    }
-
-    @Override
     public CompilationDto create(CompilationDto dto) {
         Compilation compilation = new Compilation();
         return saveDtoToCompilation(dto, compilation);
@@ -149,25 +132,15 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public Iterable<CompilationDto> compilationListToDtoList(Iterable<Compilation> taskList) {
-        // create a stream from the source iterable
-        return StreamSupport.stream(taskList.spliterator(), false)
-                .map(this::compilationToDto) // apply method to each task
-                .collect(Collectors.toList()); // collect the result into a list (or any other collection)
-    }
+    public void sendCompilationDataToMessageBroker(Compilation compilation, Set<Long> userIds,
+                                                   CompilationChangeMessage message) {
+        CompilationChangeDto compilationData = new CompilationChangeDto(userIds, message, getStatusListFromCompilation
+                        (taskRepository.findAllByCompilationIdAndIsDeleted(compilation.getId(), false)));
 
-    @Override
-    public CompilationDto compilationToDto(Compilation compilation) {
-        return new CompilationDto(compilation.getId(), compilation.getName(), compilation.getCompleteness());
-    }
-
-    @Override
-    public CompilationDto saveDtoToCompilation(CompilationDto dto, Compilation compilation) {
-        User user = userService.findUserById(dto.getUserId());
-        compilation.setName(dto.getName());
-        compilationRepository.save(compilation);
-        saveUserCompilation(user, compilation, false, false);
-        return compilationToDto(compilation);
+        HttpHeaders headers = constructAuthorizationHeader();
+        HttpEntity<CompilationChangeDto> entity = new HttpEntity<>(compilationData, headers);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, entity);
+        sendDataToMessageBroker(entity);
     }
 
     @Override
@@ -182,25 +155,48 @@ public class CompilationServiceImpl implements CompilationService {
         userCompilationRepository.save(userCompilation);
     }
 
-    @Override
-    public void sendCompilationDataToMessageBroker(Compilation compilation, Set<Long> userIds,
-                                                   CompilationChangeMessage message) {
-        CompilationChangeDto compilationData = new CompilationChangeDto(userIds, message,
-                getStatusListFromCompilation(taskRepository.findAllByCompilationIdAndIsDeleted(
-                        compilation.getId(),
-                        false))
-        );
+    private Iterable<Compilation> findAllCompilations() {
+        return compilationRepository.findAllByIsDeleted(false);
+    }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", JwtHandler.generateAuthorizationHeader());
+    private Set<Long> castUsersSetToIdsSet(Set<UserCompilation> users) {
+        Set<Long> userIds = new HashSet<>();
+        for (UserCompilation user : users) {
+            userIds.add(user.getUser().getId());
+        }
+        return userIds;
+    }
 
-        HttpEntity<CompilationChangeDto> entity = new HttpEntity<>(compilationData, headers);
+    private CompilationDto compilationToDto(Compilation compilation) {
+        return new CompilationDto(compilation.getId(), compilation.getName(), compilation.getCompleteness());
+    }
 
+    private Iterable<CompilationDto> compilationListToDtoList(Iterable<Compilation> taskList) {
+        // create a stream from the source iterable
+        return StreamSupport.stream(taskList.spliterator(), false)
+                .map(this::compilationToDto) // apply method to each task
+                .collect(Collectors.toList()); // collect the result into a list (or any other collection)
+    }
+
+    private CompilationDto saveDtoToCompilation(CompilationDto dto, Compilation compilation) {
+        User user = userService.findUserById(dto.getUserId());
+        compilation.setName(dto.getName());
+        compilationRepository.save(compilation);
+        saveUserCompilation(user, compilation, false, false);
+        return compilationToDto(compilation);
+    }
+
+    private void sendDataToMessageBroker(HttpEntity<?> entity){
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, entity);
     }
 
-    @Override
-    public List<Status> getStatusListFromCompilation(List<Task> taskList) {
+    private HttpHeaders constructAuthorizationHeader(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", jwtService.generateAuthorizationHeader(Role.USER));
+        return headers;
+    }
+
+    private List<Status> getStatusListFromCompilation(List<Task> taskList) {
         List<Status> statusList = new ArrayList<>();
         for (Task task : taskList) {
             statusList.add(task.getStatus());

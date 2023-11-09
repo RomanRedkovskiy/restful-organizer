@@ -1,25 +1,25 @@
 package com.example.taskservice.model;
 
 import com.example.taskservice.auxillary.UserCompilationId;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user_compilation")
 public class UserCompilation {
+
     @EmbeddedId
     private UserCompilationId id;
+
     private boolean readOnly = false;
+
     private boolean isShared = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
-    @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("compilationId")
-    @JsonBackReference
     private Compilation compilation;
 
     public UserCompilation() {

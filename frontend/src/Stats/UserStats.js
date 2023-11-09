@@ -17,12 +17,12 @@ function UserStats({ userStat }) {
 			<div>
 				<h2 style={{ marginBottom: 0, paddingBottom: 8 }}>Overall tasks:
 					<strong> {userStat.overallTasks}</strong></h2>
-				<h2 style={{ marginBottom: 0, paddingBottom: 8, color: '#f1356d'}}>Completed tasks: 
-					<strong style={{color: '#f1356d'}}> {userStat.completedTasks}</strong></h2>
+				<h2 style={{ marginBottom: 0, paddingBottom: 8, color: '#2ac82ac5'}}>Completed tasks: 
+					<strong style={{color: '#2ac82ac5'}}> {userStat.completedTasks}</strong></h2>
 				<h2 style={{ marginBottom: 0, paddingBottom: 8, color: '#c1cc29e8'}}>In Progress tasks:
 					<strong style={{color: '#c1cc29e8'}}> {userStat.inProgressTasks}</strong></h2>
-				<h2 style={{ marginBottom: 0, paddingBottom: 8, color: '#2ac82ac5'}}>Uncompleted tasks:
-					<strong style={{color: '#2ac82ac5'}}> {userStat.uncompletedTasks}</strong></h2>
+				<h2 style={{ marginBottom: 0, paddingBottom: 8, color: '#f1356d'}}>Uncompleted tasks:
+					<strong style={{color: '#f1356d'}}> {userStat.uncompletedTasks}</strong></h2>
 			</div>
 		</div>
 		

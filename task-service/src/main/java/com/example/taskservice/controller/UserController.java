@@ -4,7 +4,6 @@ import com.example.taskservice.dto.CompilationDto;
 import com.example.taskservice.dto.UserDto;
 import com.example.taskservice.service.CompilationService;
 import com.example.taskservice.service.UserService;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,11 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final CompilationService compilationService;
+    private final UserService userService;
 
     @Autowired
-    private CompilationService compilationService;
+    public UserController(CompilationService compilationService, UserService userService) {
+        this.compilationService = compilationService;
+        this.userService = userService;
+    }
 
     @PreAuthorize("@securityService.hasRole(#header)")
     @GetMapping("")
