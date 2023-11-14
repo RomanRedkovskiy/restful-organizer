@@ -9,13 +9,10 @@ import com.example.taskservice.repository.TaskRepository;
 import com.example.taskservice.util.Status;
 import com.example.taskservice.util.jwt.Role;
 import com.example.taskservice.util.statisticMessagesEnum.TaskChangeMessage;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
@@ -62,7 +59,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto create(TaskDto dto) {
         Task task = new Task();
-        sendAddedTaskDataToMessageBroker(dto.getCompilationId(), Status.fromString(dto.getStatus()));
+        sendTaskDataToMessageBroker(dto.getCompilationId(), TaskChangeMessage.ADD, null,
+                Status.fromString(dto.getStatus()));
         return saveDtoToTask(dto, task);
     }
 
@@ -70,7 +68,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto update(TaskDto dto) {
         Task task = findTaskById(dto.getId());
         Long previousCompilationId = task.getCompilation().getId();
-        sendEditedTaskDataToMessageBroker(dto.getCompilationId(), task.getStatus(), Status.fromString(dto.getStatus()));
+        sendTaskDataToMessageBroker(dto.getCompilationId(), TaskChangeMessage.EDIT,
+                task.getStatus(), Status.fromString(dto.getStatus()));
         TaskDto taskDto = saveDtoToTask(dto, task);
         processCompilationChange(previousCompilationId); //previous compilation recalculation
         return taskDto;
@@ -82,12 +81,13 @@ public class TaskServiceImpl implements TaskService {
         task.setDeleted(true);
         taskRepository.save(task);
         processCompilationChange(task.getCompilation().getId());
-        sendDeletedTaskDataToMessageBroker(task.getCompilation().getId(), task.getStatus());
+        sendTaskDataToMessageBroker(task.getCompilation().getId(), TaskChangeMessage.DELETE, task.getStatus(),
+                null);
     }
 
     private Task findTaskById(Long id) {
         return taskRepository.findTaskByIdAndIsDeleted(id, false).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Task with id " + id + " can't be found"));
+                new EntityNotFoundException("Task with id " + id + " can't be found"));
     }
 
     private List<Task> findTasksByCompilationId(Long id) {
@@ -121,28 +121,12 @@ public class TaskServiceImpl implements TaskService {
         );
     }
 
-    private void sendAddedTaskDataToMessageBroker(Long compilationId, Status currStatus) {
+    private void sendTaskDataToMessageBroker(Long compilationId, TaskChangeMessage taskChangeMessage,
+                                             Status prevStatus, Status currStatus) {
         Set<Long> userIds = compilationService.findAllUserIdsThatOwnCurrentCompilation(compilationId);
-        TaskChangeDto newTaskDto = new TaskChangeDto(userIds, TaskChangeMessage.ADD, null, currStatus);
-        HttpHeaders headers = constructAuthorizationHeader();
-        HttpEntity<TaskChangeDto> entity = new HttpEntity<>(newTaskDto, headers);
-        sendDataToMessageBroker(entity);
-    }
-
-    private void sendEditedTaskDataToMessageBroker(Long compilationId, Status prevStatus, Status currStatus) {
-        Set<Long> userIds = compilationService.findAllUserIdsThatOwnCurrentCompilation(compilationId);
-        TaskChangeDto changeTaskDto = new TaskChangeDto(userIds, TaskChangeMessage.EDIT, prevStatus, currStatus);
-        HttpHeaders headers = constructAuthorizationHeader();
-        HttpEntity<TaskChangeDto> entity = new HttpEntity<>(changeTaskDto, headers);
-        sendDataToMessageBroker(entity);
-    }
-
-    private void sendDeletedTaskDataToMessageBroker(Long compilationId, Status prevStatus) {
-        Set<Long> userIds = compilationService.findAllUserIdsThatOwnCurrentCompilation(compilationId);
-        TaskChangeDto deleteTaskDto = new TaskChangeDto(userIds, TaskChangeMessage.DELETE, prevStatus, null);
-        HttpHeaders headers = constructAuthorizationHeader();
-        HttpEntity<TaskChangeDto> entity = new HttpEntity<>(deleteTaskDto, headers);
-        sendDataToMessageBroker(entity);
+        TaskChangeDto taskChangeDto = new TaskChangeDto(jwtService.generateAuthorizationHeader(Role.USER),
+                userIds, taskChangeMessage, prevStatus, currStatus);
+        sendDataToMessageBroker(taskChangeDto);
     }
 
     private void processCompilationChange(Long id) {
@@ -151,14 +135,8 @@ public class TaskServiceImpl implements TaskService {
         compilationService.save(compilation);
     }
 
-    private void sendDataToMessageBroker(HttpEntity<?> entity) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, entity);
-    }
-
-    private HttpHeaders constructAuthorizationHeader() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", jwtService.generateAuthorizationHeader(Role.USER));
-        return headers;
+    private <T> void sendDataToMessageBroker(T message) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.TASK_ROUTING_KEY, message);
     }
 
     private int calculateCompleteness(Long id) {

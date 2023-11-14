@@ -10,14 +10,17 @@ const ChangeUser = () => {
   const history = useHistory();
   const currentId = useId();
   const [data, setData] = useState();
+  const [errorMessage, setErrorMessage] = useState('');
   const {data: currentUserData, isLoading, error} = useFetch('http://localhost:8081/users/' + currentId.userId);
 
   useEffect(() => {
     if(data){
       if(data.id === -1){
         console.log('error!');
+		setErrorMessage('User with this name already exists!');
       } else {
         history.push('/compilations');
+		setErrorMessage('');
       }
     }
   }, [data]);
@@ -61,6 +64,7 @@ const ChangeUser = () => {
 			formText = "Change"
 			handler = {handleChange}
 		/>
+		<div className="content create not-found"> {errorMessage} </div>
 	</>
 	}
     </>

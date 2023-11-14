@@ -1,6 +1,7 @@
 package com.example.taskservice.service;
 
 import com.example.taskservice.util.jwt.JwtData;
+import com.example.taskservice.util.jwt.JwtParsingException;
 import com.example.taskservice.util.jwt.Role;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class JwtServiceImpl implements JwtService{
         try {
             jwtData.setExpired(isTokenExpired(tokenBody.getExpiration()));
             jwtData.setRole(Role.fromString(tokenBody.getSubject()));
-        } catch (Exception e) {
+        } catch (JwtParsingException e) {
             return Optional.empty();
         }
 

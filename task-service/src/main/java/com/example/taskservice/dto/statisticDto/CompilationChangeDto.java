@@ -7,17 +7,27 @@ import java.util.List;
 import java.util.Set;
 
 public class CompilationChangeDto {
+    private String jwt;
     private Set<Long> userIds;
     private CompilationChangeMessage message;
     private List<Status> statusList;
 
-    public CompilationChangeDto(Set<Long> userIds, CompilationChangeMessage message, List<Status> statusList) {
+    public CompilationChangeDto(String jwt, Set<Long> userIds, CompilationChangeMessage message, List<Status> statusList) {
+        this.jwt = jwt;
         this.userIds = userIds;
         this.message = message;
         this.statusList = statusList;
     }
 
     public CompilationChangeDto() {
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     public Set<Long> getUserIds() {

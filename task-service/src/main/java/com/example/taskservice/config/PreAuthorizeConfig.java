@@ -13,12 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableMethodSecurity
 public class PreAuthorizeConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .anyRequest().permitAll());
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .anyRequest().permitAll());
         return http.build();
     }
 }

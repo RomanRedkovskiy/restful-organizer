@@ -1,4 +1,4 @@
-package com.example.taskservice.auxillary;
+package com.example.taskservice.util;
 
 import jakarta.persistence.Column;
 

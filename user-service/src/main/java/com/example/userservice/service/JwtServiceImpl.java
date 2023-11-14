@@ -3,6 +3,7 @@ package com.example.userservice.service;
 import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.util.jwt.JwtData;
+import com.example.userservice.util.jwt.JwtParsingException;
 import com.example.userservice.util.jwt.Role;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class JwtServiceImpl implements JwtService{
         try {
             jwtData.setExpired(isTokenExpired(tokenBody.getExpiration()));
             jwtData.setRole(Role.fromString(tokenBody.getSubject()));
-        } catch (Exception e) {
+        } catch (JwtParsingException e) {
             return Optional.empty();
         }
         return Optional.of(jwtData);

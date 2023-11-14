@@ -1,6 +1,6 @@
 package com.example.taskservice.model;
 
-import com.example.taskservice.auxillary.UserCompilationId;
+import com.example.taskservice.util.UserCompilationId;
 import jakarta.persistence.*;
 
 @Entity

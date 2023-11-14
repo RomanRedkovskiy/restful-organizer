@@ -1,6 +1,6 @@
 package com.example.taskservice.service;
 
-import com.example.taskservice.auxillary.UserCompilationId;
+import com.example.taskservice.util.UserCompilationId;
 import com.example.taskservice.config.RabbitMQConfig;
 import com.example.taskservice.dto.CompilationDto;
 import com.example.taskservice.dto.statisticDto.CompilationChangeDto;
@@ -14,6 +14,7 @@ import com.example.taskservice.repository.UserCompilationRepository;
 import com.example.taskservice.util.Status;
 import com.example.taskservice.util.jwt.Role;
 import com.example.taskservice.util.statisticMessagesEnum.CompilationChangeMessage;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -22,10 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -64,7 +63,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public Compilation findCompilationById(Long id) {
         return compilationRepository.findCompilationByIdAndIsDeleted(id, false).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Compilation with id " + id + " can't be found"));
+                new EntityNotFoundException("Compilation with id " + id + " can't be found"));
     }
 
     @Override
@@ -134,13 +133,12 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public void sendCompilationDataToMessageBroker(Compilation compilation, Set<Long> userIds,
                                                    CompilationChangeMessage message) {
-        CompilationChangeDto compilationData = new CompilationChangeDto(userIds, message, getStatusListFromCompilation
-                        (taskRepository.findAllByCompilationIdAndIsDeleted(compilation.getId(), false)));
-
-        HttpHeaders headers = constructAuthorizationHeader();
-        HttpEntity<CompilationChangeDto> entity = new HttpEntity<>(compilationData, headers);
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, entity);
-        sendDataToMessageBroker(entity);
+        CompilationChangeDto compilationData = new CompilationChangeDto(
+                jwtService.generateAuthorizationHeader(Role.USER),
+                userIds, message, getStatusListFromCompilation(taskRepository.
+                findAllByCompilationIdAndIsDeleted(compilation.getId(), false))
+        );
+        sendDataToMessageBroker(compilationData);
     }
 
     @Override
@@ -186,11 +184,11 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationToDto(compilation);
     }
 
-    private void sendDataToMessageBroker(HttpEntity<?> entity){
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, entity);
+    private void sendDataToMessageBroker(CompilationChangeDto message) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.COMPILATION_ROUTING_KEY, message);
     }
 
-    private HttpHeaders constructAuthorizationHeader(){
+    private HttpHeaders constructAuthorizationHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", jwtService.generateAuthorizationHeader(Role.USER));
         return headers;

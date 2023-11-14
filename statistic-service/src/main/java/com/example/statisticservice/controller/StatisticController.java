@@ -1,14 +1,10 @@
 package com.example.statisticservice.controller;
 
 import com.example.statisticservice.dto.StatisticDto;
-import com.example.statisticservice.model.Statistic;
 import com.example.statisticservice.service.StatisticService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/stats")

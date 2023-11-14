@@ -5,14 +5,16 @@ import com.example.taskservice.util.Status;
 
 import java.util.Set;
 
-public class TaskChangeDto {
+public class TaskChangeDto{
 
+    private String jwt;
     private Set<Long> userIds;
     private TaskChangeMessage message;
     private Status prevStatus;
     private Status currStatus;
 
-    public TaskChangeDto(Set<Long> userIds, TaskChangeMessage message, Status prevStatus, Status currStatus) {
+    public TaskChangeDto(String jwt, Set<Long> userIds, TaskChangeMessage message, Status prevStatus, Status currStatus) {
+        this.jwt = jwt;
         this.userIds = userIds;
         this.message = message;
         this.prevStatus = prevStatus;
@@ -20,6 +22,14 @@ public class TaskChangeDto {
     }
 
     public TaskChangeDto() {
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     public Set<Long> getUserIds() {

@@ -21,6 +21,6 @@ public enum Status {
                 return status;
             }
         }
-        throw new IllegalArgumentException("No constant with text " + text + " found");
+        throw new IllegalArgumentException("No enum with toString " + text + " was found");
     }
 }

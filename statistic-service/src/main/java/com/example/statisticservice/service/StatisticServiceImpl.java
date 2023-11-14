@@ -12,12 +12,11 @@ import com.example.statisticservice.util.Status;
 import com.example.statisticservice.util.jwt.JwtData;
 import com.example.statisticservice.util.jwt.Role;
 import com.example.statisticservice.util.statisticMessagesEnum.CompilationChangeMessage;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,7 +87,7 @@ public class StatisticServiceImpl implements StatisticService {
 
     private Statistic findStatisticById(Long id) {
         return statisticRepository.findStatisticByUserIdAndIsDeleted(id, false).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User statistic with id " + id + " can't be found"));
+                new EntityNotFoundException("User statistic with id " + id + " can't be found"));
     }
 
     private void saveStatistic(Statistic statistic) {

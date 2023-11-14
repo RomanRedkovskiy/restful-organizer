@@ -7,15 +7,14 @@ import com.example.userservice.model.User;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.util.UserChangeMessage;
 import com.example.userservice.util.jwt.Role;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserById(Long id) {
         return userRepository.findUserByIdAndIsDeleted(id, false).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User statistic with id " + id + " can't be found"));
+                new EntityNotFoundException("User with id " + id + " can't be found"));
     }
 
 
@@ -67,7 +66,7 @@ public class UserServiceImpl implements UserService {
         User user = findUserById(id);
         user.setDeleted(true);
         sendDeletedUserDataToTaskService(user.getId());
-        sendDeletedUserDataToMessageBroker(user);
+        sendUserDataToMessageBroker(user, UserChangeMessage.DELETE);
         saveUser(user);
     }
 
@@ -84,8 +83,8 @@ public class UserServiceImpl implements UserService {
             return entityValidationFailure(user);
         }
         saveUser(user);
-        sendRegisteredUserDataToTaskService(user);
-        sendRegisteredUserDataToMessageBroker(user);
+        sendUserDataToTaskService(user, HttpMethod.POST);
+        sendUserDataToMessageBroker(user, UserChangeMessage.REGISTER);
         return user;
     }
 
@@ -96,22 +95,16 @@ public class UserServiceImpl implements UserService {
         }
         saveUser(user);
         if (wasNicknameChanged) {
-            sendChangedUserDataToTaskService(user);
-            sendChangedUserDataToMessageBroker(user);
+            sendUserDataToTaskService(user, HttpMethod.PUT);
+            sendUserDataToMessageBroker(user, UserChangeMessage.CHANGE);
         }
         return user;
     }
 
-    private void sendRegisteredUserDataToTaskService(User user) {
+    private void sendUserDataToTaskService(User user, HttpMethod httpMethod) {
         UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
         HttpEntity<UserForTaskDto> entity = new HttpEntity<>(userDtoForTask, constructAuthorizationHeader());
-        sendDataToTaskService(taskServiceAddress, HttpMethod.POST, entity, UserForTaskDto.class);
-    }
-
-    private void sendChangedUserDataToTaskService(User user) {
-        UserForTaskDto userDtoForTask = new UserForTaskDto(user.getId(), user.getName());
-        HttpEntity<UserForTaskDto> entity = new HttpEntity<>(userDtoForTask, constructAuthorizationHeader());
-        sendDataToTaskService(taskServiceAddress, HttpMethod.PUT, entity, UserForTaskDto.class);
+        sendDataToTaskService(taskServiceAddress, httpMethod, entity, UserForTaskDto.class);
     }
 
     private void sendDeletedUserDataToTaskService(Long id) {
@@ -119,25 +112,11 @@ public class UserServiceImpl implements UserService {
         sendDataToTaskService(taskServiceAddress + "/" + id, HttpMethod.DELETE, entity, String.class);
     }
 
-    private void sendRegisteredUserDataToMessageBroker(User user) {
+    private void sendUserDataToMessageBroker(User user, UserChangeMessage changeMessage) {
         UserForStatisticDto userForStatisticDto =
-                new UserForStatisticDto(user.getId(), user.getName(), UserChangeMessage.REGISTER);
-        HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, constructAuthorizationHeader());
-        sendDataToMessageBroker(entity);
-    }
-
-    private void sendChangedUserDataToMessageBroker(User user) {
-        UserForStatisticDto userForStatisticDto =
-                new UserForStatisticDto(user.getId(), user.getName(), UserChangeMessage.CHANGE);
-        HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, constructAuthorizationHeader());
-        sendDataToMessageBroker(entity);
-    }
-
-    private void sendDeletedUserDataToMessageBroker(User user) {
-        UserForStatisticDto userForStatisticDto =
-                new UserForStatisticDto(user.getId(), user.getName(), UserChangeMessage.DELETE);
-        HttpEntity<UserForStatisticDto> entity = new HttpEntity<>(userForStatisticDto, constructAuthorizationHeader());
-        sendDataToMessageBroker(entity);
+                new UserForStatisticDto(jwtService.generateAuthorizationHeader(Role.USER),user.getId(), user.getName(),
+                        changeMessage);
+        sendDataToMessageBroker(userForStatisticDto);
     }
 
     private void sendDataToTaskService(String url, HttpMethod method, HttpEntity<?> entity, Class<?> className) {
@@ -145,8 +124,8 @@ public class UserServiceImpl implements UserService {
         restTemplate.exchange(url, method, entity, className);
     }
 
-    private void sendDataToMessageBroker(HttpEntity<?> entity) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, entity);
+    private void sendDataToMessageBroker(UserForStatisticDto message) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.USER_ROUTING_KEY, message);
     }
 
     private HttpHeaders constructAuthorizationHeader() {
