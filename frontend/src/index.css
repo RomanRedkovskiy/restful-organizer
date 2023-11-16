@@ -387,3 +387,130 @@
 	cursor: pointer;
 	width: 100px;
   }
+
+  /*About project*/ 
+  .about_project {
+	max-width: 1000px;
+	margin-left: -200px;
+	margin-right: -220px;
+	font-weight: 500;
+	color: rgb(59, 51, 52);
+  }
+  .about_project_header {
+	color: #f1356d;
+	font-weight: 900;
+	text-align: center;
+	margin-bottom: 25px;
+  }
+  .about_project_box_header {
+	color: #f1356d;
+	font-weight: 600;
+	text-align: center;
+  }
+  .about_project_box {
+	margin-bottom: 35px;
+	line-height: 1.5;
+	position: relative;
+  }
+  .about_project_box::after {
+	content: "";
+    width: 70px;
+    height: 2px;
+    display: block;
+    margin: 50px auto;
+    background-color: #f1356d;
+  }
+  .about_project_box_last {
+	margin-bottom: 50px;
+  }
+  .about_project_text {
+	text-align: justify;
+	text-indent: 35px;
+  }
+  .about_project_list {
+	padding-left: 85px;
+  }
+  .img { 
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .image_and_discription {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+  }
+  .img_descriprion_text {
+	font-weight: 400;
+	font-style: italic;
+	color: #f1356d;
+	text-align: center;
+	margin: 10px 0;
+  }
+  .restfulOrganiser_img {
+	max-width: 800px;
+	max-height: 600px;
+	border-radius: 4%;
+	border: #f1356d solid 2px;
+  }
+  .editTaskImg_1 {
+	max-width: 500px;
+	max-height: 100px;
+	border: #62b55d solid 2px;
+	margin-bottom: 10px;
+  }
+  .editTaskImg_2 {
+	max-width: 375px;
+	max-height: 375px;
+	border-radius: 4%;
+	border: #f1356d solid 2px;
+  }
+  .shareTaskImg_1 {
+	max-width: 500px;
+	max-height: 100px;
+	border: 2px solid #f15b35;
+	
+	margin-bottom: 10px;
+  }
+  .shareTaskImg_2 {
+	max-width: 400px;
+	max-height: 400px;
+	border-radius: 5%;
+	border: #f1356d solid 2px;
+  }
+  .collaborationTask_img {
+	max-width: 400px;
+	max-height: 400px;
+	border-radius: 5%;
+	border: #f1356d solid 2px;
+  }
+  .userSTATlogic_img {
+	max-width: 600px;
+	max-height: 400px;
+	border-radius: 5%;
+	border: #f1356d solid 2px;
+  }
+  /*Footer of About project*/
+.footer_text {
+	font-size: 14px;
+    color: rgb(59, 51, 52);
+    font-weight: 500;
+    text-align: center;
+    border-top: 1px #989898 solid;
+}
+.email_text a {
+	text-decoration: none;
+}
+.email b {
+    color: #f1356d;
+	cursor: pointer;
+}
+.email b:hover {
+	text-decoration: underline;
+}
+  
+
+
